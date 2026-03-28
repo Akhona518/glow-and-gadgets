@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 
 const OWNER_WHATSAPP = "27781288146"; // replace with your real number
+const ADMIN_PASSWORD = "Leesto@120"; // change this to your own password
 
 const categories = [
   { name: "All", value: "all", short: "ALL" },
@@ -747,6 +748,21 @@ export default function App() {
     setListings((prev) => [newListing, ...prev]);
   }
 
+  function toggleAdmin() {
+    if (showAdmin) {
+      setShowAdmin(false);
+      return;
+    }
+
+    const enteredPassword = window.prompt("Enter admin password");
+    if (enteredPassword === ADMIN_PASSWORD) {
+      setShowAdmin(true);
+      setTimeout(() => scrollToSection("sell"), 100);
+    } else if (enteredPassword !== null) {
+      alert("Incorrect password");
+    }
+  }
+
   const filteredListings = useMemo(() => {
     return listings.filter((item) => {
       const matchesCategory =
@@ -799,7 +815,7 @@ export default function App() {
             <NavLink sectionId="sell">Sell</NavLink>
 
             <button
-              onClick={() => setShowAdmin((prev) => !prev)}
+              onClick={toggleAdmin}
               style={{
                 background: showAdmin ? "#fdf2f8" : "white",
                 border: "1px solid #f9a8d4",
