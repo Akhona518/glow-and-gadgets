@@ -220,35 +220,35 @@ function SellerForm() {
     });
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+function handleSubmit(e) {
+  e.preventDefault();
 
-    const { businessName, whatsapp, category, location, details } = formData;
+  const { businessName, whatsapp, category, location, details } = formData;
 
-    if (!businessName || !whatsapp || !category) {
-      alert("Please fill in business name, WhatsApp number, and category.");
-      return;
-    }
-
-    const message =
-      `Hi, I want to apply as a seller on Glow & Gadgets.%0A%0A` +
-      `Business Name: ${businessName}%0A` +
-      `WhatsApp Number: ${whatsapp}%0A` +
-      `Category: ${category}%0A` +
-      `Location: ${location}%0A` +
-      `Details: ${details}`;
-
-    const url = `https://wa.me/${OWNER_WHATSAPP}?text=${message}`;
-    window.open(url, "_blank");
-
-    setFormData({
-      businessName: "",
-      whatsapp: "",
-      category: "",
-      location: "",
-      details: "",
-    });
+  if (!businessName || !whatsapp || !category) {
+    alert("Please fill in business name, WhatsApp number, and category.");
+    return;
   }
+
+  const message = `Hi, I want to apply as a seller on Glow & Gadgets.
+
+Business Name: ${businessName}
+WhatsApp Number: ${whatsapp}
+Category: ${category}
+Location: ${location}
+Details: ${details}`;
+
+  const url = `https://wa.me/${OWNER_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+
+  setFormData({
+    businessName: "",
+    whatsapp: "",
+    category: "",
+    location: "",
+    details: "",
+  });
+}
 
   return (
     <form onSubmit={handleSubmit}>
