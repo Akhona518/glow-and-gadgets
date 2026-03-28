@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 
 const OWNER_WHATSAPP = "27781288146"; // replace with your real number
-const ADMIN_PASSWORD = "Leesto@120"; // change this to your own password
+const ADMIN_PASSWORD = "Leesto@120"; // replace with your own password
+const ADMIN_USERNAME = "admin"; // replace if you want
 
 const categories = [
   { name: "All", value: "all", short: "ALL" },
@@ -731,6 +732,121 @@ function FloatingWhatsApp() {
   );
 }
 
+function AdminLoginModal({ username, setUsername, password, setPassword, onClose, onSubmit, error }) {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(17,24,39,0.45)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px",
+        zIndex: 100,
+      }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 18, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        style={{
+          width: "100%",
+          maxWidth: "420px",
+          background: "white",
+          borderRadius: "24px",
+          padding: "24px",
+          boxShadow: "0 24px 60px rgba(17,24,39,0.18)",
+          border: "1px solid #f5d0fe",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+          <div>
+            <h2
+              style={{
+                margin: 0,
+                fontSize: "28px",
+                fontWeight: "900",
+                letterSpacing: "-0.04em",
+                color: "#111827",
+              }}
+            >
+              Admin Login
+            </h2>
+            <p style={{ margin: "6px 0 0 0", color: "#6b7280", fontWeight: "500" }}>
+              Sign in to access the private dashboard.
+            </p>
+          </div>
+
+          <button
+            onClick={onClose}
+            style={{
+              border: "1px solid #e5e7eb",
+              background: "white",
+              borderRadius: "10px",
+              width: "34px",
+              height: "34px",
+              cursor: "pointer",
+              fontWeight: "700",
+            }}
+          >
+            ×
+          </button>
+        </div>
+
+        <div style={{ display: "grid", gap: "12px" }}>
+          <input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+            style={inputStyle}
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            style={inputStyle}
+          />
+
+          {error ? (
+            <div
+              style={{
+                background: "#fff1f2",
+                color: "#be123c",
+                border: "1px solid #fecdd3",
+                borderRadius: "12px",
+                padding: "10px 12px",
+                fontSize: "13px",
+                fontWeight: "700",
+              }}
+            >
+              {error}
+            </div>
+          ) : null}
+
+          <motion.button
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onSubmit}
+            style={{
+              background: "linear-gradient(135deg, #ec4899, #f97316)",
+              color: "white",
+              border: "none",
+              padding: "13px 18px",
+              borderRadius: "12px",
+              cursor: "pointer",
+              fontWeight: "800",
+              boxShadow: "0 12px 25px rgba(236, 72, 153, 0.2)",
+            }}
+          >
+            Log In
+          </motion.button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 export default function App() {
   const [listings, setListings] = useState(() => {
     const savedListings = localStorage.getItem("glowandgadgets_listings");
@@ -738,7 +854,14 @@ export default function App() {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
-  const [showAdmin, setShowAdmin] = useState(false);
+
+  const [showAdmin, setShowAdmin] = useState(() => {
+    return sessionStorage.getItem("gg_admin_logged_in") === "true";
+  });
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [adminUsername, setAdminUsername] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
 
   useEffect(() => {
     localStorage.setItem("glowandgadgets_listings", JSON.stringify(listings));
@@ -748,18 +871,27 @@ export default function App() {
     setListings((prev) => [newListing, ...prev]);
   }
 
-  function toggleAdmin() {
+  function handleAdminButton() {
     if (showAdmin) {
       setShowAdmin(false);
+      sessionStorage.removeItem("gg_admin_logged_in");
       return;
     }
+    setShowLoginModal(true);
+    setLoginError("");
+  }
 
-    const enteredPassword = window.prompt("Enter admin password");
-    if (enteredPassword === ADMIN_PASSWORD) {
+  function handleLoginSubmit() {
+    if (adminUsername === ADMIN_USERNAME && adminPassword === ADMIN_PASSWORD) {
       setShowAdmin(true);
+      sessionStorage.setItem("gg_admin_logged_in", "true");
+      setShowLoginModal(false);
+      setAdminUsername("");
+      setAdminPassword("");
+      setLoginError("");
       setTimeout(() => scrollToSection("sell"), 100);
-    } else if (enteredPassword !== null) {
-      alert("Incorrect password");
+    } else {
+      setLoginError("Incorrect username or password.");
     }
   }
 
@@ -815,7 +947,7 @@ export default function App() {
             <NavLink sectionId="sell">Sell</NavLink>
 
             <button
-              onClick={toggleAdmin}
+              onClick={handleAdminButton}
               style={{
                 background: showAdmin ? "#fdf2f8" : "white",
                 border: "1px solid #f9a8d4",
@@ -827,7 +959,7 @@ export default function App() {
                 fontSize: "12px",
               }}
             >
-              {showAdmin ? "Hide Admin" : "Admin"}
+              {showAdmin ? "Log Out Admin" : "Admin Login"}
             </button>
           </div>
         </div>
@@ -1209,7 +1341,7 @@ export default function App() {
                 Admin Dashboard
               </h2>
               <p style={{ color: "#4b5563", lineHeight: "1.7", fontWeight: "500" }}>
-                This section is hidden from normal visitors and is only for you to add listings manually.
+                This section is private and only visible after admin login.
               </p>
 
               <DashboardForm onAddListing={addListing} />
@@ -1233,6 +1365,21 @@ export default function App() {
       </footer>
 
       <FloatingWhatsApp />
+
+      {showLoginModal && (
+        <AdminLoginModal
+          username={adminUsername}
+          setUsername={setAdminUsername}
+          password={adminPassword}
+          setPassword={setAdminPassword}
+          onClose={() => {
+            setShowLoginModal(false);
+            setLoginError("");
+          }}
+          onSubmit={handleLoginSubmit}
+          error={loginError}
+        />
+      )}
     </div>
   );
 }
