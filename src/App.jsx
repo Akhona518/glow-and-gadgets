@@ -1,13 +1,177 @@
 import React from "react";
 
-const products = [
-  { emoji: "📱", name: "iPhone 13", price: "R9,500", seller: "Aphi Mobile Deals" },
-  { emoji: "💇", name: 'Brazilian Hair Bundle 24"', price: "R1,450", seller: "Nokwanda Hair Boutique" },
-  { emoji: "👁️", name: "Volume Lash Install", price: "R350", seller: "LashbyLelo" },
-  { emoji: "💅", name: "Acrylic Nails Full Set", price: "R220", seller: "Clawed by Zee" },
+const categories = [
+  { name: "iPhones", icon: "📱" },
+  { name: "Hair", icon: "💇" },
+  { name: "Lashes", icon: "👁️" },
+  { name: "Nails", icon: "💅" },
 ];
 
-function ProductCard({ emoji, name, price, seller }) {
+const featuredListings = [
+  {
+    id: 1,
+    emoji: "📱",
+    title: "iPhone 13",
+    price: "R9,500",
+    seller: "Aphi Mobile Deals",
+    location: "Cape Town",
+    type: "Product",
+  },
+  {
+    id: 2,
+    emoji: "💇",
+    title: 'Brazilian Hair Bundle 24"',
+    price: "R1,450",
+    seller: "Nokwanda Hair Boutique",
+    location: "Khayelitsha",
+    type: "Product",
+  },
+  {
+    id: 3,
+    emoji: "👁️",
+    title: "Volume Lash Install",
+    price: "R350",
+    seller: "LashbyLelo",
+    location: "Bellville",
+    type: "Service",
+  },
+  {
+    id: 4,
+    emoji: "💅",
+    title: "Acrylic Nails Full Set",
+    price: "R220",
+    seller: "Clawed by Zee",
+    location: "Maitland",
+    type: "Service",
+  },
+  {
+    id: 5,
+    emoji: "📱",
+    title: "iPhone 11",
+    price: "R6,000",
+    seller: "Cape iPhone Plug",
+    location: "Cape Town",
+    type: "Product",
+  },
+  {
+    id: 6,
+    emoji: "💇",
+    title: "HD Wig Install",
+    price: "R650",
+    seller: "The Wig Suite",
+    location: "Parow",
+    type: "Service",
+  },
+];
+
+function NavLink({ children }) {
+  return (
+    <a
+      href="/"
+      style={{
+        color: "#d4d4d4",
+        textDecoration: "none",
+        fontSize: "14px",
+      }}
+    >
+      {children}
+    </a>
+  );
+}
+
+function CategoryCard({ icon, name }) {
+  return (
+    <div
+      style={{
+        background: "#161616",
+        border: "1px solid #2a2a2a",
+        borderRadius: "18px",
+        padding: "18px",
+        textAlign: "center",
+      }}
+    >
+      <div style={{ fontSize: "32px", marginBottom: "10px" }}>{icon}</div>
+      <div style={{ fontWeight: "bold" }}>{name}</div>
+    </div>
+  );
+}
+
+function ListingCard({ emoji, title, price, seller, location, type }) {
+  return (
+    <div
+      style={{
+        background: "#171717",
+        border: "1px solid #2b2b2b",
+        borderRadius: "20px",
+        padding: "20px",
+        color: "white",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "start",
+          marginBottom: "12px",
+        }}
+      >
+        <div style={{ fontSize: "34px" }}>{emoji}</div>
+        <span
+          style={{
+            fontSize: "12px",
+            background: "#232323",
+            border: "1px solid #333",
+            padding: "6px 10px",
+            borderRadius: "999px",
+            color: "#d4d4d4",
+          }}
+        >
+          {type}
+        </span>
+      </div>
+
+      <h3 style={{ margin: "0 0 10px 0", fontSize: "20px" }}>{title}</h3>
+
+      <p style={{ margin: "0 0 6px 0", color: "#cfcfcf", fontSize: "14px" }}>
+        Seller: {seller}
+      </p>
+      <p style={{ margin: "0 0 14px 0", color: "#a3a3a3", fontSize: "14px" }}>
+        Location: {location}
+      </p>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "12px",
+        }}
+      >
+        <div>
+          <div style={{ color: "#facc15", fontWeight: "bold", fontSize: "20px" }}>
+            {price}
+          </div>
+        </div>
+        <button
+          style={{
+            background: "#ef4444",
+            color: "white",
+            border: "none",
+            padding: "10px 16px",
+            borderRadius: "12px",
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
+        >
+          Order Now
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function TrustItem({ title, text }) {
   return (
     <div
       style={{
@@ -15,29 +179,12 @@ function ProductCard({ emoji, name, price, seller }) {
         border: "1px solid #2a2a2a",
         borderRadius: "18px",
         padding: "20px",
-        color: "white",
-        boxShadow: "0 10px 25px rgba(0,0,0,0.25)",
       }}
     >
-      <div style={{ fontSize: "36px", marginBottom: "10px" }}>{emoji}</div>
-      <h3 style={{ margin: "0 0 8px 0", fontSize: "20px" }}>{name}</h3>
-      <p style={{ margin: "0 0 6px 0", color: "#d4d4d4" }}>Seller: {seller}</p>
-      <p style={{ margin: "0 0 16px 0", color: "#facc15", fontWeight: "bold", fontSize: "18px" }}>
-        {price}
+      <h3 style={{ marginTop: 0, marginBottom: "10px", fontSize: "18px" }}>{title}</h3>
+      <p style={{ margin: 0, color: "#cfcfcf", lineHeight: "1.6", fontSize: "14px" }}>
+        {text}
       </p>
-      <button
-        style={{
-          background: "#ef4444",
-          color: "white",
-          border: "none",
-          padding: "10px 16px",
-          borderRadius: "10px",
-          cursor: "pointer",
-          fontWeight: "bold",
-        }}
-      >
-        Order Now
-      </button>
     </div>
   );
 }
@@ -48,72 +195,57 @@ export default function App() {
       style={{
         fontFamily: "Arial, sans-serif",
         background: "#0a0a0a",
-        minHeight: "100vh",
         color: "white",
+        minHeight: "100vh",
       }}
     >
-      <section
+      <header
         style={{
-          padding: "60px 20px",
-          background: "linear-gradient(135deg, #111111, #1f1f1f)",
-          borderBottom: "1px solid #222",
+          borderBottom: "1px solid #1f1f1f",
+          background: "#0b0b0b",
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
         }}
       >
-        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-          <p
-            style={{
-              color: "#facc15",
-              fontWeight: "bold",
-              letterSpacing: "2px",
-              textTransform: "uppercase",
-              fontSize: "12px",
-            }}
-          >
-            South Africa Marketplace
-          </p>
-
-          <h1
-            style={{
-              fontSize: "48px",
-              margin: "10px 0 16px 0",
-              lineHeight: "1.1",
-            }}
-          >
-            Glow & Gadgets SA
-          </h1>
-
-          <p
-            style={{
-              fontSize: "20px",
-              color: "#d4d4d4",
-              maxWidth: "700px",
-              lineHeight: "1.6",
-            }}
-          >
-            Your all-in-one marketplace for iPhones, hair, lashes, nails, and local hustle businesses.
-          </p>
-
-          <div style={{ marginTop: "25px", display: "flex", gap: "12px", flexWrap: "wrap" }}>
-            <button
+        <div
+          style={{
+            maxWidth: "1150px",
+            margin: "0 auto",
+            padding: "16px 20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "16px",
+            flexWrap: "wrap",
+          }}
+        >
+          <div>
+            <div style={{ fontWeight: "bold", fontSize: "22px" }}>Glow & Gadgets</div>
+            <div
               style={{
-                background: "#ef4444",
-                color: "white",
-                border: "none",
-                padding: "14px 22px",
-                borderRadius: "12px",
-                cursor: "pointer",
-                fontWeight: "bold",
+                color: "#facc15",
+                fontSize: "11px",
+                letterSpacing: "2px",
+                textTransform: "uppercase",
+                marginTop: "2px",
               }}
             >
-              Shop Now
-            </button>
+              South Africa Marketplace
+            </div>
+          </div>
 
+          <div style={{ display: "flex", gap: "18px", alignItems: "center", flexWrap: "wrap" }}>
+            <NavLink>Home</NavLink>
+            <NavLink>Categories</NavLink>
+            <NavLink>Sellers</NavLink>
+            <NavLink>How It Works</NavLink>
             <button
               style={{
                 background: "transparent",
                 color: "white",
-                border: "1px solid #444",
-                padding: "14px 22px",
+                border: "1px solid #333",
+                padding: "10px 14px",
                 borderRadius: "12px",
                 cursor: "pointer",
                 fontWeight: "bold",
@@ -123,36 +255,250 @@ export default function App() {
             </button>
           </div>
         </div>
+      </header>
+
+      <section
+        style={{
+          padding: "70px 20px 50px",
+          background:
+            "radial-gradient(circle at top left, rgba(250,204,21,0.10), transparent 25%), radial-gradient(circle at top right, rgba(239,68,68,0.12), transparent 25%), linear-gradient(135deg, #0f0f0f, #151515)",
+          borderBottom: "1px solid #1d1d1d",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1150px",
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gap: "28px",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <p
+              style={{
+                color: "#facc15",
+                fontWeight: "bold",
+                letterSpacing: "2px",
+                textTransform: "uppercase",
+                fontSize: "12px",
+                marginBottom: "10px",
+              }}
+            >
+              One platform for beauty, tech and hustlers
+            </p>
+
+            <h1
+              style={{
+                fontSize: "clamp(38px, 6vw, 64px)",
+                lineHeight: "1.05",
+                margin: "0 0 18px 0",
+              }}
+            >
+              Discover local sellers in one trusted marketplace.
+            </h1>
+
+            <p
+              style={{
+                color: "#d4d4d4",
+                fontSize: "18px",
+                lineHeight: "1.7",
+                maxWidth: "650px",
+                marginBottom: "24px",
+              }}
+            >
+              Shop iPhones, hair, lashes, nails, and more from South African sellers all in one place.
+              Glow & Gadgets helps local businesses get seen and helps customers buy with confidence.
+            </p>
+
+            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+              <button
+                style={{
+                  background: "#ef4444",
+                  color: "white",
+                  border: "none",
+                  padding: "14px 22px",
+                  borderRadius: "12px",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
+                Explore Marketplace
+              </button>
+
+              <button
+                style={{
+                  background: "transparent",
+                  color: "white",
+                  border: "1px solid #3a3a3a",
+                  padding: "14px 22px",
+                  borderRadius: "12px",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
+                Sell on Glow & Gadgets
+              </button>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                gap: "14px",
+                flexWrap: "wrap",
+                marginTop: "24px",
+                color: "#bfbfbf",
+                fontSize: "14px",
+              }}
+            >
+              <span>✔ Verified sellers</span>
+              <span>✔ Local businesses</span>
+              <span>✔ Beauty + tech in one place</span>
+            </div>
+          </div>
+
+          <div
+            style={{
+              background: "#141414",
+              border: "1px solid #2a2a2a",
+              borderRadius: "24px",
+              padding: "24px",
+              boxShadow: "0 10px 40px rgba(0,0,0,0.35)",
+            }}
+          >
+            <div style={{ fontWeight: "bold", marginBottom: "18px", fontSize: "18px" }}>
+              Popular right now
+            </div>
+
+            <div style={{ display: "grid", gap: "14px" }}>
+              {[
+                "📱 iPhone deals from trusted resellers",
+                "💇 Premium hair bundles and wig installs",
+                "👁️ Lash appointments near you",
+                "💅 Nail techs and beauty services",
+              ].map((item) => (
+                <div
+                  key={item}
+                  style={{
+                    background: "#1a1a1a",
+                    border: "1px solid #2a2a2a",
+                    borderRadius: "16px",
+                    padding: "14px 16px",
+                    color: "#dddddd",
+                  }}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
 
       <section style={{ padding: "50px 20px" }}>
-        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-          <h2 style={{ fontSize: "32px", marginBottom: "10px" }}>Featured Products & Services</h2>
-          <p style={{ color: "#b3b3b3", marginBottom: "30px" }}>
-            Discover top local sellers in beauty and tech.
-          </p>
+        <div style={{ maxWidth: "1150px", margin: "0 auto" }}>
+          <div style={{ marginBottom: "24px" }}>
+            <h2 style={{ fontSize: "32px", margin: "0 0 10px 0" }}>Shop by category</h2>
+            <p style={{ color: "#b3b3b3", margin: 0 }}>
+              Start with the categories people already search for most.
+            </p>
+          </div>
 
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-              gap: "20px",
+              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+              gap: "16px",
             }}
           >
-            {products.map((product, index) => (
-              <ProductCard key={index} {...product} />
+            {categories.map((category) => (
+              <CategoryCard key={category.name} {...category} />
             ))}
           </div>
         </div>
       </section>
 
-      <section style={{ padding: "20px 20px 60px 20px" }}>
+      <section style={{ padding: "10px 20px 50px" }}>
+        <div style={{ maxWidth: "1150px", margin: "0 auto" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "end",
+              gap: "16px",
+              flexWrap: "wrap",
+              marginBottom: "24px",
+            }}
+          >
+            <div>
+              <h2 style={{ fontSize: "32px", margin: "0 0 10px 0" }}>Featured listings</h2>
+              <p style={{ color: "#b3b3b3", margin: 0 }}>
+                A better marketplace experience for customers and sellers.
+              </p>
+            </div>
+
+            <button
+              style={{
+                background: "transparent",
+                color: "white",
+                border: "1px solid #333",
+                padding: "12px 16px",
+                borderRadius: "12px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              View All Listings
+            </button>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+              gap: "20px",
+            }}
+          >
+            {featuredListings.map((item) => (
+              <ListingCard key={item.id} {...item} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: "0 20px 50px" }}>
         <div
           style={{
-            maxWidth: "1100px",
+            maxWidth: "1150px",
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: "20px",
+          }}
+        >
+          <TrustItem
+            title="For customers"
+            text="Find local sellers faster, compare options in one place, and shop from a platform that feels more trustworthy than random DMs."
+          />
+          <TrustItem
+            title="For sellers"
+            text="Get more visibility without posting all day. Use Glow & Gadgets as your online storefront and customer discovery platform."
+          />
+          <TrustItem
+            title="For the brand"
+            text="Glow & Gadgets is built to grow into a real SA marketplace for side hustlers, beauty services, fashion, and tech."
+          />
+        </div>
+      </section>
+
+      <section style={{ padding: "0 20px 60px" }}>
+        <div
+          style={{
+            maxWidth: "1150px",
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
             gap: "20px",
           }}
         >
@@ -160,35 +506,55 @@ export default function App() {
             style={{
               background: "#171717",
               border: "1px solid #2a2a2a",
-              borderRadius: "18px",
+              borderRadius: "20px",
               padding: "24px",
             }}
           >
             <h2 style={{ marginTop: 0 }}>Become a Seller</h2>
-            <p style={{ color: "#d4d4d4", lineHeight: "1.6" }}>
-              Join Glow & Gadgets and get your products or services in front of more customers.
+            <p style={{ color: "#d4d4d4", lineHeight: "1.7" }}>
+              Join Glow & Gadgets and get your products or services in front of more customers across South Africa.
             </p>
-            <button
+
+            <div
               style={{
-                marginTop: "14px",
-                background: "#facc15",
-                color: "black",
-                border: "none",
-                padding: "12px 18px",
-                borderRadius: "10px",
-                cursor: "pointer",
-                fontWeight: "bold",
+                display: "grid",
+                gap: "12px",
+                marginTop: "18px",
               }}
             >
-              Sign Up
-            </button>
+              <input
+                placeholder="Business name"
+                style={inputStyle}
+              />
+              <input
+                placeholder="WhatsApp number"
+                style={inputStyle}
+              />
+              <input
+                placeholder="What do you sell?"
+                style={inputStyle}
+              />
+              <button
+                style={{
+                  background: "#facc15",
+                  color: "black",
+                  border: "none",
+                  padding: "13px 18px",
+                  borderRadius: "12px",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
+                Apply to Sell
+              </button>
+            </div>
           </div>
 
           <div
             style={{
               background: "#171717",
               border: "1px solid #2a2a2a",
-              borderRadius: "18px",
+              borderRadius: "20px",
               padding: "24px",
             }}
           >
@@ -196,9 +562,45 @@ export default function App() {
             <p style={{ color: "#d4d4d4", margin: "8px 0" }}>WhatsApp: 06X XXX XXXX</p>
             <p style={{ color: "#d4d4d4", margin: "8px 0" }}>Instagram: @glowandgadgets_sa</p>
             <p style={{ color: "#d4d4d4", margin: "8px 0" }}>Location: Cape Town, South Africa</p>
+
+            <div
+              style={{
+                marginTop: "18px",
+                padding: "16px",
+                borderRadius: "16px",
+                background: "#111111",
+                border: "1px solid #2a2a2a",
+              }}
+            >
+              <div style={{ fontWeight: "bold", marginBottom: "8px" }}>Why this works</div>
+              <div style={{ color: "#cfcfcf", lineHeight: "1.6", fontSize: "14px" }}>
+                Buyers want convenience. Sellers want visibility. Glow & Gadgets sits in the middle and makes both easier.
+              </div>
+            </div>
           </div>
         </div>
       </section>
+
+      <footer
+        style={{
+          borderTop: "1px solid #1f1f1f",
+          padding: "22px 20px",
+          color: "#9a9a9a",
+          textAlign: "center",
+          fontSize: "14px",
+        }}
+      >
+        Glow & Gadgets SA — marketplace for beauty, tech, and local hustlers.
+      </footer>
     </div>
   );
 }
+
+const inputStyle = {
+  background: "#111111",
+  border: "1px solid #2f2f2f",
+  color: "white",
+  padding: "13px 14px",
+  borderRadius: "12px",
+  outline: "none",
+};
