@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 
 const OWNER_WHATSAPP = "27781288146"; // replace with your real number
 
 const categories = [
-  { name: "iPhones", short: "IP" },
-  { name: "Hair", short: "HR" },
-  { name: "Lashes", short: "LS" },
-  { name: "Nails", short: "NL" },
+  { name: "All", value: "all", short: "ALL" },
+  { name: "iPhones", value: "iPhones", short: "IP" },
+  { name: "Hair", value: "Hair", short: "HR" },
+  { name: "Lashes", value: "Lashes", short: "LS" },
+  { name: "Nails", value: "Nails", short: "NL" },
 ];
 
 const initialListings = [
   {
     id: 1,
+    category: "iPhones",
     typeIcon: "iphone",
     title: "iPhone 13",
     price: "R9,500",
@@ -23,6 +25,7 @@ const initialListings = [
   },
   {
     id: 2,
+    category: "Hair",
     typeIcon: "hair",
     title: "Luxury Weaves",
     price: "R1,450",
@@ -33,6 +36,7 @@ const initialListings = [
   },
   {
     id: 3,
+    category: "Lashes",
     typeIcon: "lashes",
     title: "Volume Lash Install",
     price: "R350",
@@ -43,6 +47,7 @@ const initialListings = [
   },
   {
     id: 4,
+    category: "Nails",
     typeIcon: "nails",
     title: "Acrylic Nails Full Set",
     price: "R220",
@@ -143,9 +148,10 @@ function IconBox({ type, size = 36 }) {
     nails: { bg: "#ffe4e6", color: "#be123c", text: "NL" },
     seller: { bg: "#ecfeff", color: "#155e75", text: "ST" },
     location: { bg: "#f0fdf4", color: "#166534", text: "LC" },
+    all: { bg: "#f3f4f6", color: "#374151", text: "ALL" },
   };
 
-  const style = styles[type] || styles.iphone;
+  const style = styles[type] || styles.all;
 
   return (
     <div
@@ -323,41 +329,88 @@ function ListingCard({ item }) {
   );
 }
 
-function TrustItem({ title, text }) {
+function SearchBar({ searchTerm, setSearchTerm }) {
   return (
-    <motion.div
-      whileHover={{ y: -5 }}
+    <div
       style={{
-        background: "rgba(255,255,255,0.9)",
-        border: "1px solid #ede9fe",
-        borderRadius: "22px",
-        padding: "22px",
-        boxShadow: "0 14px 30px rgba(139, 92, 246, 0.06)",
+        background: "rgba(255,255,255,0.95)",
+        border: "1px solid #f5d0fe",
+        borderRadius: "16px",
+        padding: "12px 14px",
+        boxShadow: "0 10px 20px rgba(236, 72, 153, 0.05)",
+        display: "flex",
+        alignItems: "center",
+        gap: "10px",
       }}
     >
-      <h3
+      <div
         style={{
-          marginTop: 0,
-          marginBottom: "10px",
-          fontSize: "20px",
-          color: "#111827",
+          width: "30px",
+          height: "30px",
+          borderRadius: "10px",
+          background: "#fdf2f8",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "#db2777",
           fontWeight: "900",
-          letterSpacing: "-0.02em",
+          fontSize: "12px",
         }}
       >
-        {title}
-      </h3>
-      <p
+        🔎
+      </div>
+
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="Search iPhones, weaves, lashes, nails..."
         style={{
-          margin: 0,
-          color: "#4b5563",
-          lineHeight: "1.7",
-          fontSize: "15px",
+          border: "none",
+          outline: "none",
+          background: "transparent",
+          width: "100%",
+          fontSize: "14px",
+          color: "#111827",
+          fontWeight: "600",
         }}
-      >
-        {text}
-      </p>
-    </motion.div>
+      />
+    </div>
+  );
+}
+
+function FilterBar({ activeCategory, setActiveCategory }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        gap: "10px",
+        flexWrap: "wrap",
+      }}
+    >
+      {categories.map((category) => {
+        const active = activeCategory === category.value;
+        return (
+          <button
+            key={category.value}
+            onClick={() => setActiveCategory(category.value)}
+            style={{
+              border: active ? "1px solid #f9a8d4" : "1px solid #e5e7eb",
+              background: active ? "#fdf2f8" : "rgba(255,255,255,0.9)",
+              color: active ? "#be185d" : "#4b5563",
+              borderRadius: "999px",
+              padding: "10px 14px",
+              cursor: "pointer",
+              fontWeight: "700",
+              fontSize: "13px",
+              boxShadow: active ? "0 8px 18px rgba(236,72,153,0.08)" : "none",
+            }}
+          >
+            {category.name}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
@@ -487,10 +540,24 @@ function DashboardForm({ onAddListing }) {
   });
 
   function handleChange(e) {
-    setDashboardData({
+    const { name, value } = e.target;
+
+    let updated = {
       ...dashboardData,
-      [e.target.name]: e.target.value,
-    });
+      [name]: value,
+    };
+
+    if (name === "category") {
+      const iconMap = {
+        iPhones: "iphone",
+        Hair: "hair",
+        Lashes: "lashes",
+        Nails: "nails",
+      };
+      updated.typeIcon = iconMap[value] || "iphone";
+    }
+
+    setDashboardData(updated);
   }
 
   function handleSubmit(e) {
@@ -585,17 +652,6 @@ function DashboardForm({ onAddListing }) {
           <option value="Product">Product</option>
           <option value="Service">Service</option>
         </select>
-        <select
-          name="typeIcon"
-          value={dashboardData.typeIcon}
-          onChange={handleChange}
-          style={inputStyle}
-        >
-          <option value="iphone">iPhone</option>
-          <option value="hair">Hair</option>
-          <option value="lashes">Lashes</option>
-          <option value="nails">Nails</option>
-        </select>
 
         <motion.button
           whileHover={{ scale: 1.02 }}
@@ -679,6 +735,8 @@ export default function App() {
     const savedListings = localStorage.getItem("glowandgadgets_listings");
     return savedListings ? JSON.parse(savedListings) : initialListings;
   });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeCategory, setActiveCategory] = useState("all");
 
   useEffect(() => {
     localStorage.setItem("glowandgadgets_listings", JSON.stringify(listings));
@@ -687,6 +745,18 @@ export default function App() {
   function addListing(newListing) {
     setListings((prev) => [newListing, ...prev]);
   }
+
+  const filteredListings = useMemo(() => {
+    return listings.filter((item) => {
+      const matchesCategory =
+        activeCategory === "all" || item.category === activeCategory;
+
+      const text = `${item.title} ${item.seller} ${item.location} ${item.category}`.toLowerCase();
+      const matchesSearch = text.includes(searchTerm.toLowerCase());
+
+      return matchesCategory && matchesSearch;
+    });
+  }, [listings, searchTerm, activeCategory]);
 
   return (
     <div
@@ -952,8 +1022,8 @@ export default function App() {
               gap: "16px",
             }}
           >
-            {categories.map((category) => (
-              <CategoryCard key={category.name} {...category} />
+            {categories.slice(1).map((category) => (
+              <CategoryCard key={category.name} name={category.name} short={category.short} />
             ))}
           </div>
         </div>
@@ -982,8 +1052,23 @@ export default function App() {
               Featured listings
             </h2>
             <p style={{ color: "#6b7280", margin: 0, fontSize: "16px", fontWeight: "500" }}>
-              Tap WhatsApp order to contact the seller directly.
+              Search and filter products or services faster.
             </p>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gap: "14px",
+              marginBottom: "20px",
+            }}
+          >
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            <FilterBar activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
+          </div>
+
+          <div style={{ marginBottom: "16px", color: "#6b7280", fontSize: "14px", fontWeight: "600" }}>
+            {filteredListings.length} result{filteredListings.length !== 1 ? "s" : ""} found
           </div>
 
           <div
@@ -993,10 +1078,27 @@ export default function App() {
               gap: "20px",
             }}
           >
-            {listings.map((item) => (
+            {filteredListings.map((item) => (
               <ListingCard key={item.id} item={item} />
             ))}
           </div>
+
+          {filteredListings.length === 0 && (
+            <div
+              style={{
+                marginTop: "20px",
+                background: "rgba(255,255,255,0.9)",
+                border: "1px solid #f5d0fe",
+                borderRadius: "18px",
+                padding: "20px",
+                textAlign: "center",
+                color: "#6b7280",
+                fontWeight: "600",
+              }}
+            >
+              No listings match your search yet.
+            </div>
+          )}
         </div>
       </motion.section>
 
