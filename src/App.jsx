@@ -227,7 +227,7 @@ function openWhatsApp(item) {
   window.open(url, "_blank");
 }
 
-function ListingCard({ item }) {
+function ListingCard({ item, isAdmin, onDelete }) {
   return (
     <motion.div
       whileHover={{ y: -8 }}
@@ -304,28 +304,50 @@ function ListingCard({ item }) {
           {item.price}
         </div>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => openWhatsApp(item)}
-          style={{
-            background: "#25D366",
-            color: "white",
-            border: "none",
-            padding: "8px 12px",
-            borderRadius: "999px",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            fontWeight: "700",
-            fontSize: "12px",
-            boxShadow: "0 8px 18px rgba(34, 197, 94, 0.20)",
-          }}
-        >
-          <WhatsAppIcon size={14} />
-          Order
-        </motion.button>
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          {isAdmin && (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => onDelete(item.id)}
+              style={{
+                background: "#ef4444",
+                color: "white",
+                border: "none",
+                padding: "8px 10px",
+                borderRadius: "999px",
+                cursor: "pointer",
+                fontWeight: "700",
+                fontSize: "12px",
+              }}
+            >
+              Delete
+            </motion.button>
+          )}
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => openWhatsApp(item)}
+            style={{
+              background: "#25D366",
+              color: "white",
+              border: "none",
+              padding: "8px 12px",
+              borderRadius: "999px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              fontWeight: "700",
+              fontSize: "12px",
+              boxShadow: "0 8px 18px rgba(34, 197, 94, 0.20)",
+            }}
+          >
+            <WhatsAppIcon size={14} />
+            Order
+          </motion.button>
+        </div>
       </div>
     </motion.div>
   );
@@ -871,6 +893,10 @@ export default function App() {
     setListings((prev) => [newListing, ...prev]);
   }
 
+  function deleteListing(id) {
+    setListings((prev) => prev.filter((item) => item.id !== id));
+  }
+
   function handleAdminButton() {
     if (showAdmin) {
       setShowAdmin(false);
@@ -1244,7 +1270,12 @@ export default function App() {
             }}
           >
             {filteredListings.map((item) => (
-              <ListingCard key={item.id} item={item} />
+              <ListingCard
+                key={item.id}
+                item={item}
+                isAdmin={showAdmin}
+                onDelete={deleteListing}
+              />
             ))}
           </div>
 
