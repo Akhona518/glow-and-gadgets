@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+
+const OWNER_WHATSAPP = "27781288146"; // replace with your real number
 
 const categories = [
   { name: "iPhones", icon: "📱" },
@@ -16,7 +18,7 @@ const featuredListings = [
     seller: "Aphi Mobile Deals",
     location: "Cape Town",
     type: "Product",
-    whatsapp: "27781288146",
+    whatsapp: OWNER_WHATSAPP,
   },
   {
     id: 2,
@@ -26,7 +28,7 @@ const featuredListings = [
     seller: "Nokwanda Hair Boutique",
     location: "Khayelitsha",
     type: "Product",
-    whatsapp: "27781288146",
+    whatsapp: OWNER_WHATSAPP,
   },
   {
     id: 3,
@@ -36,7 +38,7 @@ const featuredListings = [
     seller: "LashbyLelo",
     location: "Bellville",
     type: "Service",
-    whatsapp: "27781288146",
+    whatsapp: OWNER_WHATSAPP,
   },
   {
     id: 4,
@@ -46,7 +48,7 @@ const featuredListings = [
     seller: "Clawed by Zee",
     location: "Maitland",
     type: "Service",
-    whatsapp: "27781288146",
+    whatsapp: OWNER_WHATSAPP,
   },
   {
     id: 5,
@@ -56,7 +58,7 @@ const featuredListings = [
     seller: "Cape iPhone Plug",
     location: "Cape Town",
     type: "Product",
-    whatsapp: "27781288146",
+    whatsapp: OWNER_WHATSAPP,
   },
   {
     id: 6,
@@ -66,7 +68,7 @@ const featuredListings = [
     seller: "The Wig Suite",
     location: "Parow",
     type: "Service",
-    whatsapp: "27781288146",
+    whatsapp: OWNER_WHATSAPP,
   },
 ];
 
@@ -199,6 +201,131 @@ function TrustItem({ title, text }) {
         {text}
       </p>
     </div>
+  );
+}
+
+function SellerForm() {
+  const [formData, setFormData] = useState({
+    businessName: "",
+    whatsapp: "",
+    category: "",
+    location: "",
+    details: "",
+  });
+
+  function handleChange(e) {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const { businessName, whatsapp, category, location, details } = formData;
+
+    if (!businessName || !whatsapp || !category) {
+      alert("Please fill in business name, WhatsApp number, and category.");
+      return;
+    }
+
+    const message =
+      `Hi, I want to apply as a seller on Glow & Gadgets.%0A%0A` +
+      `Business Name: ${businessName}%0A` +
+      `WhatsApp Number: ${whatsapp}%0A` +
+      `Category: ${category}%0A` +
+      `Location: ${location}%0A` +
+      `Details: ${details}`;
+
+    const url = `https://wa.me/${OWNER_WHATSAPP}?text=${message}`;
+    window.open(url, "_blank");
+
+    setFormData({
+      businessName: "",
+      whatsapp: "",
+      category: "",
+      location: "",
+      details: "",
+    });
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div
+        style={{
+          display: "grid",
+          gap: "12px",
+          marginTop: "18px",
+        }}
+      >
+        <input
+          name="businessName"
+          value={formData.businessName}
+          onChange={handleChange}
+          placeholder="Business name"
+          style={inputStyle}
+        />
+
+        <input
+          name="whatsapp"
+          value={formData.whatsapp}
+          onChange={handleChange}
+          placeholder="WhatsApp number"
+          style={inputStyle}
+        />
+
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+          style={inputStyle}
+        >
+          <option value="">Select category</option>
+          <option value="iPhones">iPhones</option>
+          <option value="Hair">Hair</option>
+          <option value="Lashes">Lashes</option>
+          <option value="Nails">Nails</option>
+          <option value="Clothing">Clothing</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <input
+          name="location"
+          value={formData.location}
+          onChange={handleChange}
+          placeholder="Location / area"
+          style={inputStyle}
+        />
+
+        <textarea
+          name="details"
+          value={formData.details}
+          onChange={handleChange}
+          placeholder="Tell us what you sell or what service you offer"
+          style={{
+            ...inputStyle,
+            minHeight: "110px",
+            resize: "vertical",
+          }}
+        />
+
+        <button
+          type="submit"
+          style={{
+            background: "#facc15",
+            color: "black",
+            border: "none",
+            padding: "13px 18px",
+            borderRadius: "12px",
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
+        >
+          Apply to Sell
+        </button>
+      </div>
+    </form>
   );
 }
 
@@ -528,30 +655,7 @@ export default function App() {
               Join Glow & Gadgets and get your products or services in front of more customers across South Africa.
             </p>
 
-            <div
-              style={{
-                display: "grid",
-                gap: "12px",
-                marginTop: "18px",
-              }}
-            >
-              <input placeholder="Business name" style={inputStyle} />
-              <input placeholder="WhatsApp number" style={inputStyle} />
-              <input placeholder="What do you sell?" style={inputStyle} />
-              <button
-                style={{
-                  background: "#facc15",
-                  color: "black",
-                  border: "none",
-                  padding: "13px 18px",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
-              >
-                Apply to Sell
-              </button>
-            </div>
+            <SellerForm />
           </div>
 
           <div
