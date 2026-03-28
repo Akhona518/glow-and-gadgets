@@ -57,9 +57,10 @@ function NavLink({ children }) {
     <a
       href="/"
       style={{
-        color: "#d4d4d4",
+        color: "#4b5563",
         textDecoration: "none",
         fontSize: "14px",
+        fontWeight: "500",
       }}
     >
       {children}
@@ -71,15 +72,16 @@ function CategoryCard({ icon, name }) {
   return (
     <div
       style={{
-        background: "#161616",
-        border: "1px solid #2a2a2a",
+        background: "#ffffff",
+        border: "1px solid #f1f5f9",
         borderRadius: "18px",
         padding: "18px",
         textAlign: "center",
+        boxShadow: "0 10px 25px rgba(15,23,42,0.05)",
       }}
     >
       <div style={{ fontSize: "32px", marginBottom: "10px" }}>{icon}</div>
-      <div style={{ fontWeight: "bold" }}>{name}</div>
+      <div style={{ fontWeight: "700", color: "#111827" }}>{name}</div>
     </div>
   );
 }
@@ -94,12 +96,12 @@ function ListingCard({ item }) {
   return (
     <div
       style={{
-        background: "#171717",
-        border: "1px solid #2b2b2b",
+        background: "#ffffff",
+        border: "1px solid #f1f5f9",
         borderRadius: "20px",
         padding: "20px",
-        color: "white",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
+        color: "#111827",
+        boxShadow: "0 12px 30px rgba(15,23,42,0.06)",
       }}
     >
       <div
@@ -114,23 +116,26 @@ function ListingCard({ item }) {
         <span
           style={{
             fontSize: "12px",
-            background: "#232323",
-            border: "1px solid #333",
+            background: "#fff7ed",
+            border: "1px solid #fed7aa",
             padding: "6px 10px",
             borderRadius: "999px",
-            color: "#d4d4d4",
+            color: "#9a3412",
+            fontWeight: "600",
           }}
         >
           {item.type}
         </span>
       </div>
 
-      <h3 style={{ margin: "0 0 10px 0", fontSize: "20px" }}>{item.title}</h3>
+      <h3 style={{ margin: "0 0 10px 0", fontSize: "20px", color: "#111827" }}>
+        {item.title}
+      </h3>
 
-      <p style={{ margin: "0 0 6px 0", color: "#cfcfcf", fontSize: "14px" }}>
+      <p style={{ margin: "0 0 6px 0", color: "#4b5563", fontSize: "14px" }}>
         Seller: {item.seller}
       </p>
-      <p style={{ margin: "0 0 14px 0", color: "#a3a3a3", fontSize: "14px" }}>
+      <p style={{ margin: "0 0 14px 0", color: "#6b7280", fontSize: "14px" }}>
         Location: {item.location}
       </p>
 
@@ -142,10 +147,8 @@ function ListingCard({ item }) {
           gap: "12px",
         }}
       >
-        <div>
-          <div style={{ color: "#facc15", fontWeight: "bold", fontSize: "20px" }}>
-            {item.price}
-          </div>
+        <div style={{ color: "#d97706", fontWeight: "800", fontSize: "20px" }}>
+          {item.price}
         </div>
         <button
           onClick={() => openWhatsApp(item)}
@@ -156,7 +159,7 @@ function ListingCard({ item }) {
             padding: "10px 16px",
             borderRadius: "12px",
             cursor: "pointer",
-            fontWeight: "bold",
+            fontWeight: "700",
           }}
         >
           WhatsApp Order
@@ -170,14 +173,17 @@ function TrustItem({ title, text }) {
   return (
     <div
       style={{
-        background: "#171717",
-        border: "1px solid #2a2a2a",
+        background: "#ffffff",
+        border: "1px solid #f1f5f9",
         borderRadius: "18px",
         padding: "20px",
+        boxShadow: "0 10px 25px rgba(15,23,42,0.05)",
       }}
     >
-      <h3 style={{ marginTop: 0, marginBottom: "10px", fontSize: "18px" }}>{title}</h3>
-      <p style={{ margin: 0, color: "#cfcfcf", lineHeight: "1.6", fontSize: "14px" }}>
+      <h3 style={{ marginTop: 0, marginBottom: "10px", fontSize: "18px", color: "#111827" }}>
+        {title}
+      </h3>
+      <p style={{ margin: 0, color: "#4b5563", lineHeight: "1.6", fontSize: "14px" }}>
         {text}
       </p>
     </div>
@@ -282,13 +288,13 @@ Details: ${details}`;
         <button
           type="submit"
           style={{
-            background: "#facc15",
-            color: "black",
+            background: "#ec4899",
+            color: "white",
             border: "none",
             padding: "13px 18px",
             borderRadius: "12px",
             cursor: "pointer",
-            fontWeight: "bold",
+            fontWeight: "700",
           }}
         >
           Apply to Sell
@@ -431,13 +437,13 @@ function DashboardForm({ onAddListing }) {
         <button
           type="submit"
           style={{
-            background: "#ef4444",
+            background: "#f97316",
             color: "white",
             border: "none",
             padding: "13px 18px",
             borderRadius: "12px",
             cursor: "pointer",
-            fontWeight: "bold",
+            fontWeight: "700",
           }}
         >
           Add Listing
@@ -449,12 +455,13 @@ function DashboardForm({ onAddListing }) {
 
 export default function App() {
   const [listings, setListings] = useState(() => {
-  const savedListings = localStorage.getItem("glowandgadgets_listings");
-  return savedListings ? JSON.parse(savedListings) : initialListings;
-});
-useEffect(() => {
-  localStorage.setItem("glowandgadgets_listings", JSON.stringify(listings));
-}, [listings]);
+    const savedListings = localStorage.getItem("glowandgadgets_listings");
+    return savedListings ? JSON.parse(savedListings) : initialListings;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("glowandgadgets_listings", JSON.stringify(listings));
+  }, [listings]);
 
   function addListing(newListing) {
     setListings((prev) => [newListing, ...prev]);
@@ -464,15 +471,15 @@ useEffect(() => {
     <div
       style={{
         fontFamily: "Arial, sans-serif",
-        background: "#0a0a0a",
-        color: "white",
+        background: "#fffaf5",
+        color: "#111827",
         minHeight: "100vh",
       }}
     >
       <header
         style={{
-          borderBottom: "1px solid #1f1f1f",
-          background: "#0b0b0b",
+          borderBottom: "1px solid #f1e7da",
+          background: "#ffffff",
           position: "sticky",
           top: 0,
           zIndex: 10,
@@ -491,10 +498,12 @@ useEffect(() => {
           }}
         >
           <div>
-            <div style={{ fontWeight: "bold", fontSize: "22px" }}>Glow & Gadgets</div>
+            <div style={{ fontWeight: "800", fontSize: "22px", color: "#111827" }}>
+              Glow & Gadgets
+            </div>
             <div
               style={{
-                color: "#facc15",
+                color: "#d97706",
                 fontSize: "11px",
                 letterSpacing: "2px",
                 textTransform: "uppercase",
@@ -518,8 +527,8 @@ useEffect(() => {
         style={{
           padding: "70px 20px 50px",
           background:
-            "radial-gradient(circle at top left, rgba(250,204,21,0.10), transparent 25%), radial-gradient(circle at top right, rgba(239,68,68,0.12), transparent 25%), linear-gradient(135deg, #0f0f0f, #151515)",
-          borderBottom: "1px solid #1d1d1d",
+            "linear-gradient(135deg, #fff7ed 0%, #ffffff 45%, #fdf2f8 100%)",
+          borderBottom: "1px solid #f3e8d9",
         }}
       >
         <div
@@ -535,8 +544,8 @@ useEffect(() => {
           <div>
             <p
               style={{
-                color: "#facc15",
-                fontWeight: "bold",
+                color: "#d97706",
+                fontWeight: "700",
                 letterSpacing: "2px",
                 textTransform: "uppercase",
                 fontSize: "12px",
@@ -551,14 +560,15 @@ useEffect(() => {
                 fontSize: "clamp(38px, 6vw, 64px)",
                 lineHeight: "1.05",
                 margin: "0 0 18px 0",
+                color: "#111827",
               }}
             >
-              Discover local sellers in one trusted marketplace.
+              Discover local sellers in one easy, beautiful marketplace.
             </h1>
 
             <p
               style={{
-                color: "#d4d4d4",
+                color: "#4b5563",
                 fontSize: "18px",
                 lineHeight: "1.7",
                 maxWidth: "650px",
@@ -566,20 +576,20 @@ useEffect(() => {
               }}
             >
               Shop iPhones, hair, lashes, nails, and more from South African sellers all in one place.
-              Glow & Gadgets helps local businesses get seen and helps customers buy with confidence.
+              Glow & Gadgets makes it easy to browse, order, and connect.
             </p>
           </div>
 
           <div
             style={{
-              background: "#141414",
-              border: "1px solid #2a2a2a",
+              background: "#ffffff",
+              border: "1px solid #f1f5f9",
               borderRadius: "24px",
               padding: "24px",
-              boxShadow: "0 10px 40px rgba(0,0,0,0.35)",
+              boxShadow: "0 15px 35px rgba(15,23,42,0.06)",
             }}
           >
-            <div style={{ fontWeight: "bold", marginBottom: "18px", fontSize: "18px" }}>
+            <div style={{ fontWeight: "700", marginBottom: "18px", fontSize: "18px", color: "#111827" }}>
               Popular right now
             </div>
 
@@ -593,11 +603,11 @@ useEffect(() => {
                 <div
                   key={item}
                   style={{
-                    background: "#1a1a1a",
-                    border: "1px solid #2a2a2a",
+                    background: "#fffaf5",
+                    border: "1px solid #f3e8d9",
                     borderRadius: "16px",
                     padding: "14px 16px",
-                    color: "#dddddd",
+                    color: "#374151",
                   }}
                 >
                   {item}
@@ -611,8 +621,10 @@ useEffect(() => {
       <section style={{ padding: "50px 20px" }}>
         <div style={{ maxWidth: "1150px", margin: "0 auto" }}>
           <div style={{ marginBottom: "24px" }}>
-            <h2 style={{ fontSize: "32px", margin: "0 0 10px 0" }}>Shop by category</h2>
-            <p style={{ color: "#b3b3b3", margin: 0 }}>
+            <h2 style={{ fontSize: "32px", margin: "0 0 10px 0", color: "#111827" }}>
+              Shop by category
+            </h2>
+            <p style={{ color: "#6b7280", margin: 0 }}>
               Start with the categories people already search for most.
             </p>
           </div>
@@ -633,22 +645,13 @@ useEffect(() => {
 
       <section style={{ padding: "10px 20px 50px" }}>
         <div style={{ maxWidth: "1150px", margin: "0 auto" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "end",
-              gap: "16px",
-              flexWrap: "wrap",
-              marginBottom: "24px",
-            }}
-          >
-            <div>
-              <h2 style={{ fontSize: "32px", margin: "0 0 10px 0" }}>Featured listings</h2>
-              <p style={{ color: "#b3b3b3", margin: 0 }}>
-                Tap WhatsApp order to contact the seller directly.
-              </p>
-            </div>
+          <div style={{ marginBottom: "24px" }}>
+            <h2 style={{ fontSize: "32px", margin: "0 0 10px 0", color: "#111827" }}>
+              Featured listings
+            </h2>
+            <p style={{ color: "#6b7280", margin: 0 }}>
+              Tap WhatsApp order to contact the seller directly.
+            </p>
           </div>
 
           <div
@@ -702,14 +705,15 @@ useEffect(() => {
         >
           <div
             style={{
-              background: "#171717",
-              border: "1px solid #2a2a2a",
+              background: "#ffffff",
+              border: "1px solid #f1f5f9",
               borderRadius: "20px",
               padding: "24px",
+              boxShadow: "0 12px 30px rgba(15,23,42,0.05)",
             }}
           >
-            <h2 style={{ marginTop: 0 }}>Become a Seller</h2>
-            <p style={{ color: "#d4d4d4", lineHeight: "1.7" }}>
+            <h2 style={{ marginTop: 0, color: "#111827" }}>Become a Seller</h2>
+            <p style={{ color: "#4b5563", lineHeight: "1.7" }}>
               Join Glow & Gadgets and get your products or services in front of more customers across South Africa.
             </p>
 
@@ -718,14 +722,15 @@ useEffect(() => {
 
           <div
             style={{
-              background: "#171717",
-              border: "1px solid #2a2a2a",
+              background: "#ffffff",
+              border: "1px solid #f1f5f9",
               borderRadius: "20px",
               padding: "24px",
+              boxShadow: "0 12px 30px rgba(15,23,42,0.05)",
             }}
           >
-            <h2 style={{ marginTop: 0 }}>Seller Dashboard</h2>
-            <p style={{ color: "#d4d4d4", lineHeight: "1.7" }}>
+            <h2 style={{ marginTop: 0, color: "#111827" }}>Seller Dashboard</h2>
+            <p style={{ color: "#4b5563", lineHeight: "1.7" }}>
               Use this section to add seller listings manually while you’re still in MVP mode.
             </p>
 
@@ -736,11 +741,12 @@ useEffect(() => {
 
       <footer
         style={{
-          borderTop: "1px solid #1f1f1f",
+          borderTop: "1px solid #f1e7da",
           padding: "22px 20px",
-          color: "#9a9a9a",
+          color: "#6b7280",
           textAlign: "center",
           fontSize: "14px",
+          background: "#ffffff",
         }}
       >
         Glow & Gadgets SA — marketplace for beauty, tech, and local hustlers.
@@ -750,9 +756,9 @@ useEffect(() => {
 }
 
 const inputStyle = {
-  background: "#111111",
-  border: "1px solid #2f2f2f",
-  color: "white",
+  background: "#ffffff",
+  border: "1px solid #e5e7eb",
+  color: "#111827",
   padding: "13px 14px",
   borderRadius: "12px",
   outline: "none",
