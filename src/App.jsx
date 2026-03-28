@@ -13,7 +13,7 @@ const categories = [
 const initialListings = [
   {
     id: 1,
-    visual: "PHONE",
+    typeIcon: "iphone",
     title: "iPhone 13",
     price: "R9,500",
     seller: "Aphi Mobile Deals",
@@ -23,7 +23,7 @@ const initialListings = [
   },
   {
     id: 2,
-    visual: "HAIR",
+    typeIcon: "hair",
     title: "Luxury Weaves",
     price: "R1,450",
     seller: "Nokwanda Hair Boutique",
@@ -33,7 +33,7 @@ const initialListings = [
   },
   {
     id: 3,
-    visual: "LASH",
+    typeIcon: "lashes",
     title: "Volume Lash Install",
     price: "R350",
     seller: "LashbyLelo",
@@ -43,7 +43,7 @@ const initialListings = [
   },
   {
     id: 4,
-    visual: "NAIL",
+    typeIcon: "nails",
     title: "Acrylic Nails Full Set",
     price: "R220",
     seller: "Clawed by Zee",
@@ -135,6 +135,39 @@ function LogoBadge() {
   );
 }
 
+function IconBox({ type, size = 36 }) {
+  const styles = {
+    iphone: { bg: "#ede9fe", color: "#6d28d9", text: "IP" },
+    hair: { bg: "#fef3c7", color: "#92400e", text: "HR" },
+    lashes: { bg: "#fce7f3", color: "#be185d", text: "LS" },
+    nails: { bg: "#ffe4e6", color: "#be123c", text: "NL" },
+    seller: { bg: "#ecfeff", color: "#155e75", text: "ST" },
+    location: { bg: "#f0fdf4", color: "#166534", text: "LC" },
+  };
+
+  const style = styles[type] || styles.iphone;
+
+  return (
+    <div
+      style={{
+        width: size,
+        height: size,
+        borderRadius: "12px",
+        background: style.bg,
+        color: style.color,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: size <= 24 ? "9px" : "11px",
+        fontWeight: "900",
+        flexShrink: 0,
+      }}
+    >
+      {style.text}
+    </div>
+  );
+}
+
 function CategoryCard({ name, short }) {
   return (
     <motion.div
@@ -180,89 +213,6 @@ function CategoryCard({ name, short }) {
   );
 }
 
-function visualStyle(label) {
-  const map = {
-    PHONE: {
-      bg: "linear-gradient(135deg, #ede9fe, #dbeafe)",
-      border: "#c4b5fd",
-      text: "#6d28d9",
-      icon: "📱",
-    },
-    HAIR: {
-      bg: "linear-gradient(135deg, #fef3c7, #fde68a)",
-      border: "#f59e0b",
-      text: "#92400e",
-      icon: "💇",
-    },
-    LASH: {
-      bg: "linear-gradient(135deg, #fce7f3, #fbcfe8)",
-      border: "#ec4899",
-      text: "#be185d",
-      icon: "✨",
-    },
-    NAIL: {
-      bg: "linear-gradient(135deg, #ffe4e6, #fecdd3)",
-      border: "#fb7185",
-      text: "#be123c",
-      icon: "💅",
-    },
-    OTHER: {
-      bg: "linear-gradient(135deg, #ecfeff, #cffafe)",
-      border: "#22d3ee",
-      text: "#155e75",
-      icon: "🛍️",
-    },
-  };
-  return map[label] || map.OTHER;
-}
-
-function VisualCard({ label }) {
-  const style = visualStyle(label);
-  return (
-    <motion.div
-      animate={{ y: [0, -4, 0] }}
-      transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
-      style={{
-        width: "64px",
-        height: "64px",
-        borderRadius: "20px",
-        background: style.bg,
-        border: `1px solid ${style.border}`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: style.text,
-        fontSize: "28px",
-        fontWeight: "800",
-      }}
-    >
-      {style.icon}
-    </motion.div>
-  );
-}
-
-function SmallTitleIcon({ label }) {
-  const style = visualStyle(label);
-  return (
-    <div
-      style={{
-        width: "32px",
-        height: "32px",
-        borderRadius: "10px",
-        background: style.bg,
-        border: `1px solid ${style.border}`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "16px",
-        flexShrink: 0,
-      }}
-    >
-      {style.icon}
-    </div>
-  );
-}
-
 function openWhatsApp(item) {
   const message = `Hi ${item.seller}, I'm interested in ${item.title} listed on Glow & Gadgets for ${item.price}. Is it still available?`;
   const url = `https://wa.me/${item.whatsapp}?text=${encodeURIComponent(message)}`;
@@ -275,11 +225,10 @@ function ListingCard({ item }) {
       whileHover={{ y: -8 }}
       transition={{ duration: 0.25 }}
       style={{
-        background: "rgba(255,255,255,0.94)",
+        background: "rgba(255,255,255,0.95)",
         border: "1px solid #f5d0fe",
-        borderRadius: "24px",
-        padding: "20px",
-        color: "#111827",
+        borderRadius: "22px",
+        padding: "18px",
         boxShadow: "0 18px 40px rgba(236, 72, 153, 0.08)",
       }}
     >
@@ -287,17 +236,15 @@ function ListingCard({ item }) {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "start",
-          marginBottom: "14px",
+          marginBottom: "12px",
         }}
       >
-        <VisualCard label={item.visual || "OTHER"} />
+        <IconBox type={item.typeIcon} size={48} />
 
         <span
           style={{
-            fontSize: "12px",
+            fontSize: "11px",
             background: "#fff1f2",
-            border: "1px solid #fecdd3",
             padding: "6px 10px",
             borderRadius: "999px",
             color: "#be185d",
@@ -309,14 +256,14 @@ function ListingCard({ item }) {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
-        <SmallTitleIcon label={item.visual || "OTHER"} />
+        <IconBox type={item.typeIcon} size={32} />
         <h3
           style={{
             margin: 0,
             fontSize: "22px",
-            color: "#111827",
             fontWeight: "900",
             letterSpacing: "-0.03em",
+            color: "#111827",
             lineHeight: "1.1",
           }}
         >
@@ -324,40 +271,26 @@ function ListingCard({ item }) {
         </h3>
       </div>
 
-      <p
-        style={{
-          margin: "0 0 6px 0",
-          color: "#4b5563",
-          fontSize: "14px",
-          fontWeight: "600",
-        }}
-      >
-        Seller: {item.seller}
-      </p>
-      <p
-        style={{
-          margin: "0 0 16px 0",
-          color: "#6b7280",
-          fontSize: "14px",
-        }}
-      >
-        Location: {item.location}
-      </p>
+      <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "14px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <IconBox type="seller" size={24} />
+          <span style={{ fontSize: "13px", fontWeight: "600", color: "#374151" }}>
+            {item.seller}
+          </span>
+        </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: "12px",
-        }}
-      >
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <IconBox type="location" size={24} />
+          <span style={{ fontSize: "13px", color: "#6b7280" }}>{item.location}</span>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
         <div
           style={{
-            color: "#d97706",
-            fontWeight: "900",
             fontSize: "22px",
-            letterSpacing: "-0.02em",
+            fontWeight: "900",
+            color: "#d97706",
           }}
         >
           {item.price}
@@ -365,20 +298,25 @@ function ListingCard({ item }) {
 
         <motion.button
           whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.96 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => openWhatsApp(item)}
           style={{
-            background: "linear-gradient(135deg, #22c55e, #25D366)",
+            background: "#25D366",
             color: "white",
             border: "none",
-            padding: "10px 16px",
-            borderRadius: "12px",
+            padding: "8px 12px",
+            borderRadius: "999px",
             cursor: "pointer",
-            fontWeight: "800",
-            boxShadow: "0 10px 20px rgba(37, 211, 102, 0.25)",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            fontWeight: "700",
+            fontSize: "12px",
+            boxShadow: "0 8px 18px rgba(34, 197, 94, 0.20)",
           }}
         >
-          WhatsApp Order
+          <WhatsAppIcon size={14} />
+          Order
         </motion.button>
       </div>
     </motion.div>
@@ -472,9 +410,26 @@ Details: ${details}`;
   return (
     <form onSubmit={handleSubmit}>
       <div style={{ display: "grid", gap: "12px", marginTop: "18px" }}>
-        <input name="businessName" value={formData.businessName} onChange={handleChange} placeholder="Business name" style={inputStyle} />
-        <input name="whatsapp" value={formData.whatsapp} onChange={handleChange} placeholder="WhatsApp number" style={inputStyle} />
-        <select name="category" value={formData.category} onChange={handleChange} style={inputStyle}>
+        <input
+          name="businessName"
+          value={formData.businessName}
+          onChange={handleChange}
+          placeholder="Business name"
+          style={inputStyle}
+        />
+        <input
+          name="whatsapp"
+          value={formData.whatsapp}
+          onChange={handleChange}
+          placeholder="WhatsApp number"
+          style={inputStyle}
+        />
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+          style={inputStyle}
+        >
           <option value="">Select category</option>
           <option value="iPhones">iPhones</option>
           <option value="Hair">Hair</option>
@@ -483,7 +438,13 @@ Details: ${details}`;
           <option value="Clothing">Clothing</option>
           <option value="Other">Other</option>
         </select>
-        <input name="location" value={formData.location} onChange={handleChange} placeholder="Location / area" style={inputStyle} />
+        <input
+          name="location"
+          value={formData.location}
+          onChange={handleChange}
+          placeholder="Location / area"
+          style={inputStyle}
+        />
         <textarea
           name="details"
           value={formData.details}
@@ -522,7 +483,7 @@ function DashboardForm({ onAddListing }) {
     category: "iPhones",
     location: "",
     type: "Product",
-    visual: "PHONE",
+    typeIcon: "iphone",
   });
 
   function handleChange(e) {
@@ -549,7 +510,7 @@ function DashboardForm({ onAddListing }) {
       category: dashboardData.category,
       location: dashboardData.location,
       type: dashboardData.type,
-      visual: dashboardData.visual,
+      typeIcon: dashboardData.typeIcon,
     });
 
     setDashboardData({
@@ -560,18 +521,47 @@ function DashboardForm({ onAddListing }) {
       category: "iPhones",
       location: "",
       type: "Product",
-      visual: "PHONE",
+      typeIcon: "iphone",
     });
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <div style={{ display: "grid", gap: "12px" }}>
-        <input name="seller" value={dashboardData.seller} onChange={handleChange} placeholder="Seller name" style={inputStyle} />
-        <input name="whatsapp" value={dashboardData.whatsapp} onChange={handleChange} placeholder="Seller WhatsApp number" style={inputStyle} />
-        <input name="title" value={dashboardData.title} onChange={handleChange} placeholder="Listing title" style={inputStyle} />
-        <input name="price" value={dashboardData.price} onChange={handleChange} placeholder="Price e.g. R2,500" style={inputStyle} />
-        <select name="category" value={dashboardData.category} onChange={handleChange} style={inputStyle}>
+        <input
+          name="seller"
+          value={dashboardData.seller}
+          onChange={handleChange}
+          placeholder="Seller name"
+          style={inputStyle}
+        />
+        <input
+          name="whatsapp"
+          value={dashboardData.whatsapp}
+          onChange={handleChange}
+          placeholder="Seller WhatsApp number"
+          style={inputStyle}
+        />
+        <input
+          name="title"
+          value={dashboardData.title}
+          onChange={handleChange}
+          placeholder="Listing title"
+          style={inputStyle}
+        />
+        <input
+          name="price"
+          value={dashboardData.price}
+          onChange={handleChange}
+          placeholder="Price e.g. R2,500"
+          style={inputStyle}
+        />
+        <select
+          name="category"
+          value={dashboardData.category}
+          onChange={handleChange}
+          style={inputStyle}
+        >
           <option value="iPhones">iPhones</option>
           <option value="Hair">Hair</option>
           <option value="Lashes">Lashes</option>
@@ -579,17 +569,32 @@ function DashboardForm({ onAddListing }) {
           <option value="Clothing">Clothing</option>
           <option value="Other">Other</option>
         </select>
-        <input name="location" value={dashboardData.location} onChange={handleChange} placeholder="Location" style={inputStyle} />
-        <select name="type" value={dashboardData.type} onChange={handleChange} style={inputStyle}>
+        <input
+          name="location"
+          value={dashboardData.location}
+          onChange={handleChange}
+          placeholder="Location"
+          style={inputStyle}
+        />
+        <select
+          name="type"
+          value={dashboardData.type}
+          onChange={handleChange}
+          style={inputStyle}
+        >
           <option value="Product">Product</option>
           <option value="Service">Service</option>
         </select>
-        <select name="visual" value={dashboardData.visual} onChange={handleChange} style={inputStyle}>
-          <option value="PHONE">Phone</option>
-          <option value="HAIR">Hair</option>
-          <option value="LASH">Lash</option>
-          <option value="NAIL">Nail</option>
-          <option value="OTHER">Other</option>
+        <select
+          name="typeIcon"
+          value={dashboardData.typeIcon}
+          onChange={handleChange}
+          style={inputStyle}
+        >
+          <option value="iphone">iPhone</option>
+          <option value="hair">Hair</option>
+          <option value="lashes">Lashes</option>
+          <option value="nails">Nails</option>
         </select>
 
         <motion.button
@@ -614,6 +619,29 @@ function DashboardForm({ onAddListing }) {
   );
 }
 
+function WhatsAppIcon({ size = 20 }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path
+        d="M16 3C8.82 3 3 8.73 3 15.8c0 2.5.74 4.83 2.02 6.79L3.7 29l6.63-1.75A13.1 13.1 0 0 0 16 28.6c7.18 0 13-5.73 13-12.8C29 8.73 23.18 3 16 3Z"
+        fill="white"
+        fillOpacity="0.18"
+      />
+      <path
+        d="M16 5.2c-5.95 0-10.77 4.74-10.77 10.58 0 2.2.69 4.25 1.87 5.94l-1.09 3.87 4.02-1.05a10.9 10.9 0 0 0 5.97 1.77c5.95 0 10.77-4.74 10.77-10.58C26.77 9.94 21.95 5.2 16 5.2Zm6.31 14.43c-.26.72-1.52 1.37-2.1 1.46-.54.08-1.22.11-1.96-.12-.45-.14-1.02-.34-1.76-.65-3.1-1.33-5.13-4.45-5.29-4.66-.16-.22-1.26-1.64-1.26-3.13 0-1.49.79-2.22 1.07-2.52.28-.29.61-.36.82-.36.2 0 .41 0 .59.01.19.01.44-.07.69.52.26.62.87 2.14.95 2.29.08.15.13.33.03.53-.1.2-.15.33-.31.5-.15.17-.33.39-.47.52-.16.15-.33.31-.14.61.18.29.81 1.32 1.75 2.14 1.2 1.04 2.21 1.36 2.51 1.51.31.15.49.13.67-.08.18-.21.77-.88.97-1.18.2-.29.41-.25.69-.15.28.1 1.79.84 2.1.99.31.15.51.22.59.34.08.12.08.7-.18 1.42Z"
+        fill="white"
+      />
+    </svg>
+  );
+}
+
 function FloatingWhatsApp() {
   const message = "Hi, I found Glow & Gadgets and I would like to know more.";
   const url = `https://wa.me/${OWNER_WHATSAPP}?text=${encodeURIComponent(message)}`;
@@ -623,28 +651,25 @@ function FloatingWhatsApp() {
       href={url}
       target="_blank"
       rel="noreferrer"
-      whileHover={{ scale: 1.08 }}
-      whileTap={{ scale: 0.96 }}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
       style={{
         position: "fixed",
-        right: "18px",
-        bottom: "18px",
-        width: "62px",
-        height: "62px",
-        borderRadius: "999px",
-        background: "linear-gradient(135deg, #22c55e, #25D366)",
+        right: "16px",
+        bottom: "16px",
+        width: "48px",
+        height: "48px",
+        borderRadius: "50%",
+        background: "#25D366",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        color: "white",
-        fontWeight: "900",
-        textDecoration: "none",
-        boxShadow: "0 16px 30px rgba(37, 211, 102, 0.28)",
+        boxShadow: "0 12px 25px rgba(37, 211, 102, 0.3)",
         zIndex: 50,
       }}
       aria-label="Chat on WhatsApp"
     >
-      WA
+      <WhatsAppIcon size={22} />
     </motion.a>
   );
 }
@@ -755,7 +780,12 @@ export default function App() {
             zIndex: 1,
           }}
         >
-          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ duration: 0.6 }}>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: 0.6 }}
+          >
             <p
               style={{
                 color: "#db2777",
