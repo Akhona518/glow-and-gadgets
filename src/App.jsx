@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const OWNER_WHATSAPP = "27781288146"; // replace with your real number
 
@@ -52,15 +53,20 @@ const initialListings = [
   },
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0 },
+};
+
 function NavLink({ children }) {
   return (
     <a
       href="/"
       style={{
-        color: "#4b5563",
+        color: "#5b6470",
         textDecoration: "none",
         fontSize: "14px",
-        fontWeight: "500",
+        fontWeight: "600",
       }}
     >
       {children}
@@ -70,19 +76,22 @@ function NavLink({ children }) {
 
 function CategoryCard({ icon, name }) {
   return (
-    <div
+    <motion.div
+      whileHover={{ y: -6, scale: 1.02 }}
+      transition={{ duration: 0.2 }}
       style={{
-        background: "#ffffff",
-        border: "1px solid #f1f5f9",
-        borderRadius: "18px",
-        padding: "18px",
+        background: "rgba(255,255,255,0.88)",
+        border: "1px solid #f3e8ff",
+        borderRadius: "22px",
+        padding: "22px",
         textAlign: "center",
-        boxShadow: "0 10px 25px rgba(15,23,42,0.05)",
+        boxShadow: "0 14px 35px rgba(148, 163, 184, 0.12)",
+        backdropFilter: "blur(10px)",
       }}
     >
-      <div style={{ fontSize: "32px", marginBottom: "10px" }}>{icon}</div>
-      <div style={{ fontWeight: "700", color: "#111827" }}>{name}</div>
-    </div>
+      <div style={{ fontSize: "34px", marginBottom: "10px" }}>{icon}</div>
+      <div style={{ fontWeight: "700", color: "#1f2937" }}>{name}</div>
+    </motion.div>
   );
 }
 
@@ -94,14 +103,17 @@ function openWhatsApp(item) {
 
 function ListingCard({ item }) {
   return (
-    <div
+    <motion.div
+      whileHover={{ y: -8 }}
+      transition={{ duration: 0.25 }}
       style={{
-        background: "#ffffff",
-        border: "1px solid #f1f5f9",
-        borderRadius: "20px",
+        background: "rgba(255,255,255,0.92)",
+        border: "1px solid #f5d0fe",
+        borderRadius: "24px",
         padding: "20px",
         color: "#111827",
-        boxShadow: "0 12px 30px rgba(15,23,42,0.06)",
+        boxShadow: "0 18px 40px rgba(236, 72, 153, 0.08)",
+        backdropFilter: "blur(10px)",
       }}
     >
       <div
@@ -112,16 +124,23 @@ function ListingCard({ item }) {
           marginBottom: "12px",
         }}
       >
-        <div style={{ fontSize: "34px" }}>{item.emoji}</div>
+        <motion.div
+          animate={{ y: [0, -4, 0] }}
+          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+          style={{ fontSize: "34px" }}
+        >
+          {item.emoji}
+        </motion.div>
+
         <span
           style={{
             fontSize: "12px",
-            background: "#fff7ed",
-            border: "1px solid #fed7aa",
+            background: "#fff1f2",
+            border: "1px solid #fecdd3",
             padding: "6px 10px",
             borderRadius: "999px",
-            color: "#9a3412",
-            fontWeight: "600",
+            color: "#be185d",
+            fontWeight: "700",
           }}
         >
           {item.type}
@@ -150,34 +169,39 @@ function ListingCard({ item }) {
         <div style={{ color: "#d97706", fontWeight: "800", fontSize: "20px" }}>
           {item.price}
         </div>
-        <button
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.96 }}
           onClick={() => openWhatsApp(item)}
           style={{
-            background: "#25D366",
+            background: "linear-gradient(135deg, #22c55e, #25D366)",
             color: "white",
             border: "none",
             padding: "10px 16px",
             borderRadius: "12px",
             cursor: "pointer",
             fontWeight: "700",
+            boxShadow: "0 10px 20px rgba(37, 211, 102, 0.25)",
           }}
         >
           WhatsApp Order
-        </button>
+        </motion.button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 function TrustItem({ title, text }) {
   return (
-    <div
+    <motion.div
+      whileHover={{ y: -5 }}
       style={{
-        background: "#ffffff",
-        border: "1px solid #f1f5f9",
-        borderRadius: "18px",
-        padding: "20px",
-        boxShadow: "0 10px 25px rgba(15,23,42,0.05)",
+        background: "rgba(255,255,255,0.9)",
+        border: "1px solid #ede9fe",
+        borderRadius: "22px",
+        padding: "22px",
+        boxShadow: "0 14px 30px rgba(139, 92, 246, 0.06)",
       }}
     >
       <h3 style={{ marginTop: 0, marginBottom: "10px", fontSize: "18px", color: "#111827" }}>
@@ -186,7 +210,7 @@ function TrustItem({ title, text }) {
       <p style={{ margin: 0, color: "#4b5563", lineHeight: "1.6", fontSize: "14px" }}>
         {text}
       </p>
-    </div>
+    </motion.div>
   );
 }
 
@@ -285,20 +309,23 @@ Details: ${details}`;
             resize: "vertical",
           }}
         />
-        <button
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
           type="submit"
           style={{
-            background: "#ec4899",
+            background: "linear-gradient(135deg, #ec4899, #f97316)",
             color: "white",
             border: "none",
             padding: "13px 18px",
             borderRadius: "12px",
             cursor: "pointer",
             fontWeight: "700",
+            boxShadow: "0 12px 25px rgba(236, 72, 153, 0.2)",
           }}
         >
           Apply to Sell
-        </button>
+        </motion.button>
       </div>
     </form>
   );
@@ -434,20 +461,23 @@ function DashboardForm({ onAddListing }) {
           <option value="✨">✨ Other</option>
         </select>
 
-        <button
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
           type="submit"
           style={{
-            background: "#f97316",
+            background: "linear-gradient(135deg, #f97316, #fb7185)",
             color: "white",
             border: "none",
             padding: "13px 18px",
             borderRadius: "12px",
             cursor: "pointer",
             fontWeight: "700",
+            boxShadow: "0 12px 25px rgba(249, 115, 22, 0.18)",
           }}
         >
           Add Listing
-        </button>
+        </motion.button>
       </div>
     </form>
   );
@@ -471,15 +501,17 @@ export default function App() {
     <div
       style={{
         fontFamily: "Arial, sans-serif",
-        background: "#fffaf5",
+        background:
+          "linear-gradient(180deg, #fffaf5 0%, #fff7fb 35%, #fdf4ff 100%)",
         color: "#111827",
         minHeight: "100vh",
       }}
     >
       <header
         style={{
-          borderBottom: "1px solid #f1e7da",
-          background: "#ffffff",
+          borderBottom: "1px solid #f5e7eb",
+          background: "rgba(255,255,255,0.82)",
+          backdropFilter: "blur(10px)",
           position: "sticky",
           top: 0,
           zIndex: 10,
@@ -497,7 +529,7 @@ export default function App() {
             flexWrap: "wrap",
           }}
         >
-          <div>
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
             <div style={{ fontWeight: "800", fontSize: "22px", color: "#111827" }}>
               Glow & Gadgets
             </div>
@@ -512,7 +544,7 @@ export default function App() {
             >
               South Africa Marketplace
             </div>
-          </div>
+          </motion.div>
 
           <div style={{ display: "flex", gap: "18px", alignItems: "center", flexWrap: "wrap" }}>
             <NavLink>Home</NavLink>
@@ -525,12 +557,41 @@ export default function App() {
 
       <section
         style={{
-          padding: "70px 20px 50px",
-          background:
-            "linear-gradient(135deg, #fff7ed 0%, #ffffff 45%, #fdf2f8 100%)",
+          padding: "78px 20px 56px",
+          position: "relative",
+          overflow: "hidden",
           borderBottom: "1px solid #f3e8d9",
         }}
       >
+        <motion.div
+          animate={{ x: [0, 20, 0], y: [0, -12, 0] }}
+          transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+          style={{
+            position: "absolute",
+            top: 30,
+            right: 80,
+            width: 180,
+            height: 180,
+            background: "rgba(251, 113, 133, 0.14)",
+            borderRadius: "999px",
+            filter: "blur(22px)",
+          }}
+        />
+        <motion.div
+          animate={{ x: [0, -18, 0], y: [0, 12, 0] }}
+          transition={{ repeat: Infinity, duration: 9, ease: "easeInOut" }}
+          style={{
+            position: "absolute",
+            bottom: 20,
+            left: 60,
+            width: 220,
+            height: 220,
+            background: "rgba(192, 132, 252, 0.14)",
+            borderRadius: "999px",
+            filter: "blur(28px)",
+          }}
+        />
+
         <div
           style={{
             maxWidth: "1150px",
@@ -539,12 +600,19 @@ export default function App() {
             gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
             gap: "28px",
             alignItems: "center",
+            position: "relative",
+            zIndex: 1,
           }}
         >
-          <div>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: 0.6 }}
+          >
             <p
               style={{
-                color: "#d97706",
+                color: "#db2777",
                 fontWeight: "700",
                 letterSpacing: "2px",
                 textTransform: "uppercase",
@@ -558,7 +626,7 @@ export default function App() {
             <h1
               style={{
                 fontSize: "clamp(38px, 6vw, 64px)",
-                lineHeight: "1.05",
+                lineHeight: "1.02",
                 margin: "0 0 18px 0",
                 color: "#111827",
               }}
@@ -578,15 +646,55 @@ export default function App() {
               Shop iPhones, hair, lashes, nails, and more from South African sellers all in one place.
               Glow & Gadgets makes it easy to browse, order, and connect.
             </p>
-          </div>
 
-          <div
+            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  background: "linear-gradient(135deg, #ec4899, #f97316)",
+                  color: "white",
+                  border: "none",
+                  padding: "14px 22px",
+                  borderRadius: "14px",
+                  cursor: "pointer",
+                  fontWeight: "700",
+                  boxShadow: "0 14px 28px rgba(236, 72, 153, 0.18)",
+                }}
+              >
+                Explore Marketplace
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  background: "rgba(255,255,255,0.85)",
+                  color: "#111827",
+                  border: "1px solid #f5d0fe",
+                  padding: "14px 22px",
+                  borderRadius: "14px",
+                  cursor: "pointer",
+                  fontWeight: "700",
+                }}
+              >
+                Sell on Glow & Gadgets
+              </motion.button>
+            </div>
+          </motion.div>
+
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ delay: 0.15, duration: 0.6 }}
             style={{
-              background: "#ffffff",
-              border: "1px solid #f1f5f9",
-              borderRadius: "24px",
+              background: "rgba(255,255,255,0.9)",
+              border: "1px solid #f5d0fe",
+              borderRadius: "28px",
               padding: "24px",
-              boxShadow: "0 15px 35px rgba(15,23,42,0.06)",
+              boxShadow: "0 20px 40px rgba(236, 72, 153, 0.08)",
+              backdropFilter: "blur(10px)",
             }}
           >
             <div style={{ fontWeight: "700", marginBottom: "18px", fontSize: "18px", color: "#111827" }}>
@@ -599,26 +707,36 @@ export default function App() {
                 "💇 Premium hair bundles and wig installs",
                 "👁️ Lash appointments near you",
                 "💅 Nail techs and beauty services",
-              ].map((item) => (
-                <div
+              ].map((item, index) => (
+                <motion.div
                   key={item}
+                  initial={{ opacity: 0, x: 16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.25 + index * 0.08 }}
                   style={{
                     background: "#fffaf5",
-                    border: "1px solid #f3e8d9",
+                    border: "1px solid #fce7f3",
                     borderRadius: "16px",
                     padding: "14px 16px",
                     color: "#374151",
                   }}
                 >
                   {item}
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      <section style={{ padding: "50px 20px" }}>
+      <motion.section
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={fadeUp}
+        transition={{ duration: 0.5 }}
+        style={{ padding: "50px 20px" }}
+      >
         <div style={{ maxWidth: "1150px", margin: "0 auto" }}>
           <div style={{ marginBottom: "24px" }}>
             <h2 style={{ fontSize: "32px", margin: "0 0 10px 0", color: "#111827" }}>
@@ -641,9 +759,16 @@ export default function App() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section style={{ padding: "10px 20px 50px" }}>
+      <motion.section
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.15 }}
+        variants={fadeUp}
+        transition={{ duration: 0.5 }}
+        style={{ padding: "10px 20px 50px" }}
+      >
         <div style={{ maxWidth: "1150px", margin: "0 auto" }}>
           <div style={{ marginBottom: "24px" }}>
             <h2 style={{ fontSize: "32px", margin: "0 0 10px 0", color: "#111827" }}>
@@ -666,9 +791,16 @@ export default function App() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section style={{ padding: "0 20px 50px" }}>
+      <motion.section
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={fadeUp}
+        transition={{ duration: 0.5 }}
+        style={{ padding: "0 20px 50px" }}
+      >
         <div
           style={{
             maxWidth: "1150px",
@@ -691,9 +823,16 @@ export default function App() {
             text="Glow & Gadgets is built to grow into a real SA marketplace for side hustlers, beauty services, fashion, and tech."
           />
         </div>
-      </section>
+      </motion.section>
 
-      <section style={{ padding: "0 20px 60px" }}>
+      <motion.section
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.12 }}
+        variants={fadeUp}
+        transition={{ duration: 0.5 }}
+        style={{ padding: "0 20px 60px" }}
+      >
         <div
           style={{
             maxWidth: "1150px",
@@ -703,13 +842,14 @@ export default function App() {
             gap: "20px",
           }}
         >
-          <div
+          <motion.div
+            whileHover={{ y: -4 }}
             style={{
-              background: "#ffffff",
-              border: "1px solid #f1f5f9",
-              borderRadius: "20px",
+              background: "rgba(255,255,255,0.92)",
+              border: "1px solid #fbcfe8",
+              borderRadius: "24px",
               padding: "24px",
-              boxShadow: "0 12px 30px rgba(15,23,42,0.05)",
+              boxShadow: "0 18px 35px rgba(236, 72, 153, 0.07)",
             }}
           >
             <h2 style={{ marginTop: 0, color: "#111827" }}>Become a Seller</h2>
@@ -718,15 +858,16 @@ export default function App() {
             </p>
 
             <SellerForm />
-          </div>
+          </motion.div>
 
-          <div
+          <motion.div
+            whileHover={{ y: -4 }}
             style={{
-              background: "#ffffff",
-              border: "1px solid #f1f5f9",
-              borderRadius: "20px",
+              background: "rgba(255,255,255,0.92)",
+              border: "1px solid #fed7aa",
+              borderRadius: "24px",
               padding: "24px",
-              boxShadow: "0 12px 30px rgba(15,23,42,0.05)",
+              boxShadow: "0 18px 35px rgba(249, 115, 22, 0.07)",
             }}
           >
             <h2 style={{ marginTop: 0, color: "#111827" }}>Seller Dashboard</h2>
@@ -735,18 +876,18 @@ export default function App() {
             </p>
 
             <DashboardForm onAddListing={addListing} />
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       <footer
         style={{
-          borderTop: "1px solid #f1e7da",
+          borderTop: "1px solid #f5e7eb",
           padding: "22px 20px",
           color: "#6b7280",
           textAlign: "center",
           fontSize: "14px",
-          background: "#ffffff",
+          background: "rgba(255,255,255,0.7)",
         }}
       >
         Glow & Gadgets SA — marketplace for beauty, tech, and local hustlers.
@@ -756,10 +897,11 @@ export default function App() {
 }
 
 const inputStyle = {
-  background: "#ffffff",
+  background: "rgba(255,255,255,0.95)",
   border: "1px solid #e5e7eb",
   color: "#111827",
   padding: "13px 14px",
   borderRadius: "12px",
   outline: "none",
+  boxShadow: "0 4px 12px rgba(15,23,42,0.03)",
 };
