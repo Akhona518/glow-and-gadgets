@@ -4,16 +4,16 @@ import { motion } from "framer-motion";
 const OWNER_WHATSAPP = "27781288146"; // replace with your real number
 
 const categories = [
-  { name: "iPhones", icon: "📱" },
-  { name: "Hair", icon: "💇" },
-  { name: "Lashes", icon: "👁️" },
-  { name: "Nails", icon: "💅" },
+  { name: "iPhones", short: "IP" },
+  { name: "Hair", short: "HR" },
+  { name: "Lashes", short: "LS" },
+  { name: "Nails", short: "NL" },
 ];
 
 const initialListings = [
   {
     id: 1,
-    emoji: "📱",
+    visual: "PHONE",
     title: "iPhone 13",
     price: "R9,500",
     seller: "Aphi Mobile Deals",
@@ -23,7 +23,7 @@ const initialListings = [
   },
   {
     id: 2,
-    emoji: "💇",
+    visual: "HAIR",
     title: 'Brazilian Hair Bundle 24"',
     price: "R1,450",
     seller: "Nokwanda Hair Boutique",
@@ -33,7 +33,7 @@ const initialListings = [
   },
   {
     id: 3,
-    emoji: "👁️",
+    visual: "LASH",
     title: "Volume Lash Install",
     price: "R350",
     seller: "LashbyLelo",
@@ -43,7 +43,7 @@ const initialListings = [
   },
   {
     id: 4,
-    emoji: "💅",
+    visual: "NAIL",
     title: "Acrylic Nails Full Set",
     price: "R220",
     seller: "Clawed by Zee",
@@ -58,23 +58,79 @@ const fadeUp = {
   show: { opacity: 1, y: 0 },
 };
 
-function NavLink({ children }) {
+function scrollToSection(sectionId) {
+  const el = document.getElementById(sectionId);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+function NavLink({ children, sectionId }) {
   return (
-    <a
-      href="/"
+    <button
+      onClick={() => scrollToSection(sectionId)}
       style={{
         color: "#5b6470",
+        background: "transparent",
+        border: "none",
         textDecoration: "none",
         fontSize: "14px",
         fontWeight: "600",
+        cursor: "pointer",
       }}
     >
       {children}
-    </a>
+    </button>
   );
 }
 
-function CategoryCard({ icon, name }) {
+function LogoBadge() {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.03 }}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "12px",
+      }}
+    >
+      <div
+        style={{
+          width: "46px",
+          height: "46px",
+          borderRadius: "16px",
+          background: "linear-gradient(135deg, #ec4899, #f97316)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "white",
+          fontWeight: "800",
+          boxShadow: "0 12px 24px rgba(236,72,153,0.2)",
+        }}
+      >
+        GG
+      </div>
+      <div>
+        <div style={{ fontWeight: "800", fontSize: "22px", color: "#111827" }}>
+          Glow & Gadgets
+        </div>
+        <div
+          style={{
+            color: "#d97706",
+            fontSize: "11px",
+            letterSpacing: "2px",
+            textTransform: "uppercase",
+            marginTop: "2px",
+          }}
+        >
+          South Africa Marketplace
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function CategoryCard({ name, short }) {
   return (
     <motion.div
       whileHover={{ y: -6, scale: 1.02 }}
@@ -89,8 +145,81 @@ function CategoryCard({ icon, name }) {
         backdropFilter: "blur(10px)",
       }}
     >
-      <div style={{ fontSize: "34px", marginBottom: "10px" }}>{icon}</div>
+      <div
+        style={{
+          width: "56px",
+          height: "56px",
+          margin: "0 auto 12px",
+          borderRadius: "18px",
+          background: "linear-gradient(135deg, #fdf2f8, #ffedd5)",
+          border: "1px solid #fbcfe8",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontWeight: "800",
+          color: "#be185d",
+        }}
+      >
+        {short}
+      </div>
       <div style={{ fontWeight: "700", color: "#1f2937" }}>{name}</div>
+    </motion.div>
+  );
+}
+
+function visualStyle(label) {
+  const map = {
+    PHONE: {
+      bg: "linear-gradient(135deg, #ede9fe, #dbeafe)",
+      border: "#c4b5fd",
+      text: "#6d28d9",
+    },
+    HAIR: {
+      bg: "linear-gradient(135deg, #fef3c7, #fde68a)",
+      border: "#f59e0b",
+      text: "#92400e",
+    },
+    LASH: {
+      bg: "linear-gradient(135deg, #fce7f3, #fbcfe8)",
+      border: "#ec4899",
+      text: "#be185d",
+    },
+    NAIL: {
+      bg: "linear-gradient(135deg, #ffe4e6, #fecdd3)",
+      border: "#fb7185",
+      text: "#be123c",
+    },
+    OTHER: {
+      bg: "linear-gradient(135deg, #ecfeff, #cffafe)",
+      border: "#22d3ee",
+      text: "#155e75",
+    },
+  };
+  return map[label] || map.OTHER;
+}
+
+function VisualCard({ label }) {
+  const style = visualStyle(label);
+  return (
+    <motion.div
+      animate={{ y: [0, -4, 0] }}
+      transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
+      style={{
+        width: "64px",
+        height: "64px",
+        borderRadius: "20px",
+        background: style.bg,
+        border: `1px solid ${style.border}`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: style.text,
+        fontSize: "11px",
+        fontWeight: "800",
+        letterSpacing: "0.08em",
+      }}
+    >
+      {label}
     </motion.div>
   );
 }
@@ -124,13 +253,7 @@ function ListingCard({ item }) {
           marginBottom: "12px",
         }}
       >
-        <motion.div
-          animate={{ y: [0, -4, 0] }}
-          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-          style={{ fontSize: "34px" }}
-        >
-          {item.emoji}
-        </motion.div>
+        <VisualCard label={item.visual || "OTHER"} />
 
         <span
           style={{
@@ -263,26 +386,9 @@ Details: ${details}`;
   return (
     <form onSubmit={handleSubmit}>
       <div style={{ display: "grid", gap: "12px", marginTop: "18px" }}>
-        <input
-          name="businessName"
-          value={formData.businessName}
-          onChange={handleChange}
-          placeholder="Business name"
-          style={inputStyle}
-        />
-        <input
-          name="whatsapp"
-          value={formData.whatsapp}
-          onChange={handleChange}
-          placeholder="WhatsApp number"
-          style={inputStyle}
-        />
-        <select
-          name="category"
-          value={formData.category}
-          onChange={handleChange}
-          style={inputStyle}
-        >
+        <input name="businessName" value={formData.businessName} onChange={handleChange} placeholder="Business name" style={inputStyle} />
+        <input name="whatsapp" value={formData.whatsapp} onChange={handleChange} placeholder="WhatsApp number" style={inputStyle} />
+        <select name="category" value={formData.category} onChange={handleChange} style={inputStyle}>
           <option value="">Select category</option>
           <option value="iPhones">iPhones</option>
           <option value="Hair">Hair</option>
@@ -291,23 +397,13 @@ Details: ${details}`;
           <option value="Clothing">Clothing</option>
           <option value="Other">Other</option>
         </select>
-        <input
-          name="location"
-          value={formData.location}
-          onChange={handleChange}
-          placeholder="Location / area"
-          style={inputStyle}
-        />
+        <input name="location" value={formData.location} onChange={handleChange} placeholder="Location / area" style={inputStyle} />
         <textarea
           name="details"
           value={formData.details}
           onChange={handleChange}
           placeholder="Tell us what you sell or what service you offer"
-          style={{
-            ...inputStyle,
-            minHeight: "110px",
-            resize: "vertical",
-          }}
+          style={{ ...inputStyle, minHeight: "110px", resize: "vertical" }}
         />
         <motion.button
           whileHover={{ scale: 1.02 }}
@@ -340,7 +436,7 @@ function DashboardForm({ onAddListing }) {
     category: "iPhones",
     location: "",
     type: "Product",
-    emoji: "📱",
+    visual: "PHONE",
   });
 
   function handleChange(e) {
@@ -353,12 +449,7 @@ function DashboardForm({ onAddListing }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (
-      !dashboardData.seller ||
-      !dashboardData.title ||
-      !dashboardData.price ||
-      !dashboardData.whatsapp
-    ) {
+    if (!dashboardData.seller || !dashboardData.title || !dashboardData.price || !dashboardData.whatsapp) {
       alert("Please fill in seller name, title, price, and WhatsApp number.");
       return;
     }
@@ -372,7 +463,7 @@ function DashboardForm({ onAddListing }) {
       category: dashboardData.category,
       location: dashboardData.location,
       type: dashboardData.type,
-      emoji: dashboardData.emoji,
+      visual: dashboardData.visual,
     });
 
     setDashboardData({
@@ -383,47 +474,18 @@ function DashboardForm({ onAddListing }) {
       category: "iPhones",
       location: "",
       type: "Product",
-      emoji: "📱",
+      visual: "PHONE",
     });
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <div style={{ display: "grid", gap: "12px" }}>
-        <input
-          name="seller"
-          value={dashboardData.seller}
-          onChange={handleChange}
-          placeholder="Seller name"
-          style={inputStyle}
-        />
-        <input
-          name="whatsapp"
-          value={dashboardData.whatsapp}
-          onChange={handleChange}
-          placeholder="Seller WhatsApp number"
-          style={inputStyle}
-        />
-        <input
-          name="title"
-          value={dashboardData.title}
-          onChange={handleChange}
-          placeholder="Listing title"
-          style={inputStyle}
-        />
-        <input
-          name="price"
-          value={dashboardData.price}
-          onChange={handleChange}
-          placeholder="Price e.g. R2,500"
-          style={inputStyle}
-        />
-        <select
-          name="category"
-          value={dashboardData.category}
-          onChange={handleChange}
-          style={inputStyle}
-        >
+        <input name="seller" value={dashboardData.seller} onChange={handleChange} placeholder="Seller name" style={inputStyle} />
+        <input name="whatsapp" value={dashboardData.whatsapp} onChange={handleChange} placeholder="Seller WhatsApp number" style={inputStyle} />
+        <input name="title" value={dashboardData.title} onChange={handleChange} placeholder="Listing title" style={inputStyle} />
+        <input name="price" value={dashboardData.price} onChange={handleChange} placeholder="Price e.g. R2,500" style={inputStyle} />
+        <select name="category" value={dashboardData.category} onChange={handleChange} style={inputStyle}>
           <option value="iPhones">iPhones</option>
           <option value="Hair">Hair</option>
           <option value="Lashes">Lashes</option>
@@ -431,34 +493,17 @@ function DashboardForm({ onAddListing }) {
           <option value="Clothing">Clothing</option>
           <option value="Other">Other</option>
         </select>
-        <input
-          name="location"
-          value={dashboardData.location}
-          onChange={handleChange}
-          placeholder="Location"
-          style={inputStyle}
-        />
-        <select
-          name="type"
-          value={dashboardData.type}
-          onChange={handleChange}
-          style={inputStyle}
-        >
+        <input name="location" value={dashboardData.location} onChange={handleChange} placeholder="Location" style={inputStyle} />
+        <select name="type" value={dashboardData.type} onChange={handleChange} style={inputStyle}>
           <option value="Product">Product</option>
           <option value="Service">Service</option>
         </select>
-        <select
-          name="emoji"
-          value={dashboardData.emoji}
-          onChange={handleChange}
-          style={inputStyle}
-        >
-          <option value="📱">📱 Phone</option>
-          <option value="💇">💇 Hair</option>
-          <option value="👁️">👁️ Lashes</option>
-          <option value="💅">💅 Nails</option>
-          <option value="👗">👗 Clothing</option>
-          <option value="✨">✨ Other</option>
+        <select name="visual" value={dashboardData.visual} onChange={handleChange} style={inputStyle}>
+          <option value="PHONE">Phone</option>
+          <option value="HAIR">Hair</option>
+          <option value="LASH">Lash</option>
+          <option value="NAIL">Nail</option>
+          <option value="OTHER">Other</option>
         </select>
 
         <motion.button
@@ -483,6 +528,41 @@ function DashboardForm({ onAddListing }) {
   );
 }
 
+function FloatingWhatsApp() {
+  const message = "Hi, I found Glow & Gadgets and I would like to know more.";
+  const url = `https://wa.me/${OWNER_WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+  return (
+    <motion.a
+      href={url}
+      target="_blank"
+      rel="noreferrer"
+      whileHover={{ scale: 1.08 }}
+      whileTap={{ scale: 0.96 }}
+      style={{
+        position: "fixed",
+        right: "18px",
+        bottom: "18px",
+        width: "62px",
+        height: "62px",
+        borderRadius: "999px",
+        background: "linear-gradient(135deg, #22c55e, #25D366)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "white",
+        fontWeight: "800",
+        textDecoration: "none",
+        boxShadow: "0 16px 30px rgba(37, 211, 102, 0.28)",
+        zIndex: 50,
+      }}
+      aria-label="Chat on WhatsApp"
+    >
+      WA
+    </motion.a>
+  );
+}
+
 export default function App() {
   const [listings, setListings] = useState(() => {
     const savedListings = localStorage.getItem("glowandgadgets_listings");
@@ -501,10 +581,10 @@ export default function App() {
     <div
       style={{
         fontFamily: "Arial, sans-serif",
-        background:
-          "linear-gradient(180deg, #fffaf5 0%, #fff7fb 35%, #fdf4ff 100%)",
+        background: "linear-gradient(180deg, #fffaf5 0%, #fff7fb 35%, #fdf4ff 100%)",
         color: "#111827",
         minHeight: "100vh",
+        scrollBehavior: "smooth",
       }}
     >
       <header
@@ -529,33 +609,19 @@ export default function App() {
             flexWrap: "wrap",
           }}
         >
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-            <div style={{ fontWeight: "800", fontSize: "22px", color: "#111827" }}>
-              Glow & Gadgets
-            </div>
-            <div
-              style={{
-                color: "#d97706",
-                fontSize: "11px",
-                letterSpacing: "2px",
-                textTransform: "uppercase",
-                marginTop: "2px",
-              }}
-            >
-              South Africa Marketplace
-            </div>
-          </motion.div>
+          <LogoBadge />
 
           <div style={{ display: "flex", gap: "18px", alignItems: "center", flexWrap: "wrap" }}>
-            <NavLink>Home</NavLink>
-            <NavLink>Categories</NavLink>
-            <NavLink>Sellers</NavLink>
-            <NavLink>How It Works</NavLink>
+            <NavLink sectionId="home">Home</NavLink>
+            <NavLink sectionId="categories">Categories</NavLink>
+            <NavLink sectionId="listings">Listings</NavLink>
+            <NavLink sectionId="sell">Sell</NavLink>
           </div>
         </div>
       </header>
 
       <section
+        id="home"
         style={{
           padding: "78px 20px 56px",
           position: "relative",
@@ -604,12 +670,7 @@ export default function App() {
             zIndex: 1,
           }}
         >
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            transition={{ duration: 0.6 }}
-          >
+          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ duration: 0.6 }}>
             <p
               style={{
                 color: "#db2777",
@@ -651,6 +712,7 @@ export default function App() {
               <motion.button
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
+                onClick={() => scrollToSection("listings")}
                 style={{
                   background: "linear-gradient(135deg, #ec4899, #f97316)",
                   color: "white",
@@ -668,6 +730,7 @@ export default function App() {
               <motion.button
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
+                onClick={() => scrollToSection("sell")}
                 style={{
                   background: "rgba(255,255,255,0.85)",
                   color: "#111827",
@@ -703,10 +766,10 @@ export default function App() {
 
             <div style={{ display: "grid", gap: "14px" }}>
               {[
-                "📱 iPhone deals from trusted resellers",
-                "💇 Premium hair bundles and wig installs",
-                "👁️ Lash appointments near you",
-                "💅 Nail techs and beauty services",
+                "iPhone deals from trusted resellers",
+                "Premium hair bundles and wig installs",
+                "Lash appointments near you",
+                "Nail techs and beauty services",
               ].map((item, index) => (
                 <motion.div
                   key={item}
@@ -730,6 +793,7 @@ export default function App() {
       </section>
 
       <motion.section
+        id="categories"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.2 }}
@@ -762,6 +826,7 @@ export default function App() {
       </motion.section>
 
       <motion.section
+        id="listings"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.15 }}
@@ -826,6 +891,7 @@ export default function App() {
       </motion.section>
 
       <motion.section
+        id="sell"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.12 }}
@@ -892,6 +958,8 @@ export default function App() {
       >
         Glow & Gadgets SA — marketplace for beauty, tech, and local hustlers.
       </footer>
+
+      <FloatingWhatsApp />
     </div>
   );
 }
