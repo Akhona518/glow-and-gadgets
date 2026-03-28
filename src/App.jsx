@@ -737,6 +737,7 @@ export default function App() {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [showAdmin, setShowAdmin] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("glowandgadgets_listings", JSON.stringify(listings));
@@ -796,6 +797,22 @@ export default function App() {
             <NavLink sectionId="categories">Categories</NavLink>
             <NavLink sectionId="listings">Listings</NavLink>
             <NavLink sectionId="sell">Sell</NavLink>
+
+            <button
+              onClick={() => setShowAdmin((prev) => !prev)}
+              style={{
+                background: showAdmin ? "#fdf2f8" : "white",
+                border: "1px solid #f9a8d4",
+                color: "#be185d",
+                borderRadius: "999px",
+                padding: "8px 12px",
+                cursor: "pointer",
+                fontWeight: "700",
+                fontSize: "12px",
+              }}
+            >
+              {showAdmin ? "Hide Admin" : "Admin"}
+            </button>
           </div>
         </div>
       </header>
@@ -1116,8 +1133,11 @@ export default function App() {
             maxWidth: "1150px",
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gridTemplateColumns: showAdmin
+              ? "repeat(auto-fit, minmax(320px, 1fr))"
+              : "minmax(320px, 640px)",
             gap: "20px",
+            justifyContent: "center",
           }}
         >
           <motion.div
@@ -1148,33 +1168,37 @@ export default function App() {
             <SellerForm />
           </motion.div>
 
-          <motion.div
-            whileHover={{ y: -4 }}
-            style={{
-              background: "rgba(255,255,255,0.92)",
-              border: "1px solid #fed7aa",
-              borderRadius: "24px",
-              padding: "24px",
-              boxShadow: "0 18px 35px rgba(249, 115, 22, 0.07)",
-            }}
-          >
-            <h2
+          {showAdmin && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -4 }}
               style={{
-                marginTop: 0,
-                color: "#111827",
-                fontWeight: "900",
-                letterSpacing: "-0.03em",
-                fontSize: "28px",
+                background: "rgba(255,255,255,0.92)",
+                border: "1px solid #fed7aa",
+                borderRadius: "24px",
+                padding: "24px",
+                boxShadow: "0 18px 35px rgba(249, 115, 22, 0.07)",
               }}
             >
-              Seller Dashboard
-            </h2>
-            <p style={{ color: "#4b5563", lineHeight: "1.7", fontWeight: "500" }}>
-              Use this section to add seller listings manually while you’re still in MVP mode.
-            </p>
+              <h2
+                style={{
+                  marginTop: 0,
+                  color: "#111827",
+                  fontWeight: "900",
+                  letterSpacing: "-0.03em",
+                  fontSize: "28px",
+                }}
+              >
+                Admin Dashboard
+              </h2>
+              <p style={{ color: "#4b5563", lineHeight: "1.7", fontWeight: "500" }}>
+                This section is hidden from normal visitors and is only for you to add listings manually.
+              </p>
 
-            <DashboardForm onAddListing={addListing} />
-          </motion.div>
+              <DashboardForm onAddListing={addListing} />
+            </motion.div>
+          )}
         </div>
       </motion.section>
 
