@@ -9,7 +9,7 @@ const categories = [
   { name: "Nails", icon: "💅" },
 ];
 
-const featuredListings = [
+const initialListings = [
   {
     id: 1,
     emoji: "📱",
@@ -47,26 +47,6 @@ const featuredListings = [
     price: "R220",
     seller: "Clawed by Zee",
     location: "Maitland",
-    type: "Service",
-    whatsapp: OWNER_WHATSAPP,
-  },
-  {
-    id: 5,
-    emoji: "📱",
-    title: "iPhone 11",
-    price: "R6,000",
-    seller: "Cape iPhone Plug",
-    location: "Cape Town",
-    type: "Product",
-    whatsapp: OWNER_WHATSAPP,
-  },
-  {
-    id: 6,
-    emoji: "💇",
-    title: "HD Wig Install",
-    price: "R650",
-    seller: "The Wig Suite",
-    location: "Parow",
     type: "Service",
     whatsapp: OWNER_WHATSAPP,
   },
@@ -220,17 +200,17 @@ function SellerForm() {
     });
   }
 
-function handleSubmit(e) {
-  e.preventDefault();
+  function handleSubmit(e) {
+    e.preventDefault();
 
-  const { businessName, whatsapp, category, location, details } = formData;
+    const { businessName, whatsapp, category, location, details } = formData;
 
-  if (!businessName || !whatsapp || !category) {
-    alert("Please fill in business name, WhatsApp number, and category.");
-    return;
-  }
+    if (!businessName || !whatsapp || !category) {
+      alert("Please fill in business name, WhatsApp number, and category.");
+      return;
+    }
 
-  const message = `Hi, I want to apply as a seller on Glow & Gadgets.
+    const message = `Hi, I want to apply as a seller on Glow & Gadgets.
 
 Business Name: ${businessName}
 WhatsApp Number: ${whatsapp}
@@ -238,27 +218,21 @@ Category: ${category}
 Location: ${location}
 Details: ${details}`;
 
-  const url = `https://wa.me/${OWNER_WHATSAPP}?text=${encodeURIComponent(message)}`;
-  window.open(url, "_blank");
+    const url = `https://wa.me/${OWNER_WHATSAPP}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
 
-  setFormData({
-    businessName: "",
-    whatsapp: "",
-    category: "",
-    location: "",
-    details: "",
-  });
-}
+    setFormData({
+      businessName: "",
+      whatsapp: "",
+      category: "",
+      location: "",
+      details: "",
+    });
+  }
 
   return (
     <form onSubmit={handleSubmit}>
-      <div
-        style={{
-          display: "grid",
-          gap: "12px",
-          marginTop: "18px",
-        }}
-      >
+      <div style={{ display: "grid", gap: "12px", marginTop: "18px" }}>
         <input
           name="businessName"
           value={formData.businessName}
@@ -266,7 +240,6 @@ Details: ${details}`;
           placeholder="Business name"
           style={inputStyle}
         />
-
         <input
           name="whatsapp"
           value={formData.whatsapp}
@@ -274,7 +247,6 @@ Details: ${details}`;
           placeholder="WhatsApp number"
           style={inputStyle}
         />
-
         <select
           name="category"
           value={formData.category}
@@ -289,7 +261,6 @@ Details: ${details}`;
           <option value="Clothing">Clothing</option>
           <option value="Other">Other</option>
         </select>
-
         <input
           name="location"
           value={formData.location}
@@ -297,7 +268,6 @@ Details: ${details}`;
           placeholder="Location / area"
           style={inputStyle}
         />
-
         <textarea
           name="details"
           value={formData.details}
@@ -309,7 +279,6 @@ Details: ${details}`;
             resize: "vertical",
           }}
         />
-
         <button
           type="submit"
           style={{
@@ -329,7 +298,162 @@ Details: ${details}`;
   );
 }
 
+function DashboardForm({ onAddListing }) {
+  const [dashboardData, setDashboardData] = useState({
+    seller: "",
+    whatsapp: OWNER_WHATSAPP,
+    title: "",
+    price: "",
+    category: "iPhones",
+    location: "",
+    type: "Product",
+    emoji: "📱",
+  });
+
+  function handleChange(e) {
+    setDashboardData({
+      ...dashboardData,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (
+      !dashboardData.seller ||
+      !dashboardData.title ||
+      !dashboardData.price ||
+      !dashboardData.whatsapp
+    ) {
+      alert("Please fill in seller name, title, price, and WhatsApp number.");
+      return;
+    }
+
+    onAddListing({
+      id: Date.now(),
+      seller: dashboardData.seller,
+      whatsapp: dashboardData.whatsapp,
+      title: dashboardData.title,
+      price: dashboardData.price,
+      category: dashboardData.category,
+      location: dashboardData.location,
+      type: dashboardData.type,
+      emoji: dashboardData.emoji,
+    });
+
+    setDashboardData({
+      seller: "",
+      whatsapp: OWNER_WHATSAPP,
+      title: "",
+      price: "",
+      category: "iPhones",
+      location: "",
+      type: "Product",
+      emoji: "📱",
+    });
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div style={{ display: "grid", gap: "12px" }}>
+        <input
+          name="seller"
+          value={dashboardData.seller}
+          onChange={handleChange}
+          placeholder="Seller name"
+          style={inputStyle}
+        />
+        <input
+          name="whatsapp"
+          value={dashboardData.whatsapp}
+          onChange={handleChange}
+          placeholder="Seller WhatsApp number"
+          style={inputStyle}
+        />
+        <input
+          name="title"
+          value={dashboardData.title}
+          onChange={handleChange}
+          placeholder="Listing title"
+          style={inputStyle}
+        />
+        <input
+          name="price"
+          value={dashboardData.price}
+          onChange={handleChange}
+          placeholder="Price e.g. R2,500"
+          style={inputStyle}
+        />
+        <select
+          name="category"
+          value={dashboardData.category}
+          onChange={handleChange}
+          style={inputStyle}
+        >
+          <option value="iPhones">iPhones</option>
+          <option value="Hair">Hair</option>
+          <option value="Lashes">Lashes</option>
+          <option value="Nails">Nails</option>
+          <option value="Clothing">Clothing</option>
+          <option value="Other">Other</option>
+        </select>
+        <input
+          name="location"
+          value={dashboardData.location}
+          onChange={handleChange}
+          placeholder="Location"
+          style={inputStyle}
+        />
+        <select
+          name="type"
+          value={dashboardData.type}
+          onChange={handleChange}
+          style={inputStyle}
+        >
+          <option value="Product">Product</option>
+          <option value="Service">Service</option>
+        </select>
+        <select
+          name="emoji"
+          value={dashboardData.emoji}
+          onChange={handleChange}
+          style={inputStyle}
+        >
+          <option value="📱">📱 Phone</option>
+          <option value="💇">💇 Hair</option>
+          <option value="👁️">👁️ Lashes</option>
+          <option value="💅">💅 Nails</option>
+          <option value="👗">👗 Clothing</option>
+          <option value="✨">✨ Other</option>
+        </select>
+
+        <button
+          type="submit"
+          style={{
+            background: "#ef4444",
+            color: "white",
+            border: "none",
+            padding: "13px 18px",
+            borderRadius: "12px",
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
+        >
+          Add Listing
+        </button>
+      </div>
+    </form>
+  );
+}
+
 export default function App() {
+  const [listings, setListings] = useState(initialListings);
+
+  function addListing(newListing) {
+    setListings((prev) => [newListing, ...prev]);
+  }
+
   return (
     <div
       style={{
@@ -380,19 +504,6 @@ export default function App() {
             <NavLink>Categories</NavLink>
             <NavLink>Sellers</NavLink>
             <NavLink>How It Works</NavLink>
-            <button
-              style={{
-                background: "transparent",
-                color: "white",
-                border: "1px solid #333",
-                padding: "10px 14px",
-                borderRadius: "12px",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              Become a Seller
-            </button>
           </div>
         </div>
       </header>
@@ -451,51 +562,6 @@ export default function App() {
               Shop iPhones, hair, lashes, nails, and more from South African sellers all in one place.
               Glow & Gadgets helps local businesses get seen and helps customers buy with confidence.
             </p>
-
-            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-              <button
-                style={{
-                  background: "#ef4444",
-                  color: "white",
-                  border: "none",
-                  padding: "14px 22px",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
-              >
-                Explore Marketplace
-              </button>
-
-              <button
-                style={{
-                  background: "transparent",
-                  color: "white",
-                  border: "1px solid #3a3a3a",
-                  padding: "14px 22px",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
-              >
-                Sell on Glow & Gadgets
-              </button>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                gap: "14px",
-                flexWrap: "wrap",
-                marginTop: "24px",
-                color: "#bfbfbf",
-                fontSize: "14px",
-              }}
-            >
-              <span>✔ Verified sellers</span>
-              <span>✔ Local businesses</span>
-              <span>✔ Beauty + tech in one place</span>
-            </div>
           </div>
 
           <div
@@ -577,20 +643,6 @@ export default function App() {
                 Tap WhatsApp order to contact the seller directly.
               </p>
             </div>
-
-            <button
-              style={{
-                background: "transparent",
-                color: "white",
-                border: "1px solid #333",
-                padding: "12px 16px",
-                borderRadius: "12px",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              View All Listings
-            </button>
           </div>
 
           <div
@@ -600,7 +652,7 @@ export default function App() {
               gap: "20px",
             }}
           >
-            {featuredListings.map((item) => (
+            {listings.map((item) => (
               <ListingCard key={item.id} item={item} />
             ))}
           </div>
@@ -666,25 +718,12 @@ export default function App() {
               padding: "24px",
             }}
           >
-            <h2 style={{ marginTop: 0 }}>Contact</h2>
-            <p style={{ color: "#d4d4d4", margin: "8px 0" }}>WhatsApp: 06X XXX XXXX</p>
-            <p style={{ color: "#d4d4d4", margin: "8px 0" }}>Instagram: @glowandgadgets_sa</p>
-            <p style={{ color: "#d4d4d4", margin: "8px 0" }}>Location: Cape Town, South Africa</p>
+            <h2 style={{ marginTop: 0 }}>Seller Dashboard</h2>
+            <p style={{ color: "#d4d4d4", lineHeight: "1.7" }}>
+              Use this section to add seller listings manually while you’re still in MVP mode.
+            </p>
 
-            <div
-              style={{
-                marginTop: "18px",
-                padding: "16px",
-                borderRadius: "16px",
-                background: "#111111",
-                border: "1px solid #2a2a2a",
-              }}
-            >
-              <div style={{ fontWeight: "bold", marginBottom: "8px" }}>Why this works</div>
-              <div style={{ color: "#cfcfcf", lineHeight: "1.6", fontSize: "14px" }}>
-                Buyers want convenience. Sellers want visibility. Glow & Gadgets sits in the middle and makes both easier.
-              </div>
-            </div>
+            <DashboardForm onAddListing={addListing} />
           </div>
         </div>
       </section>
