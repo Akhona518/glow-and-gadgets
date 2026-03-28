@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const OWNER_WHATSAPP = "27781288146"; // replace with your real number
 
@@ -448,7 +448,13 @@ function DashboardForm({ onAddListing }) {
 }
 
 export default function App() {
-  const [listings, setListings] = useState(initialListings);
+  const [listings, setListings] = useState(() => {
+  const savedListings = localStorage.getItem("glowandgadgets_listings");
+  return savedListings ? JSON.parse(savedListings) : initialListings;
+});
+useEffect(() => {
+  localStorage.setItem("glowandgadgets_listings", JSON.stringify(listings));
+}, [listings]);
 
   function addListing(newListing) {
     setListings((prev) => [newListing, ...prev]);
