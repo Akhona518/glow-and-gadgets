@@ -16,6 +16,7 @@ const featuredListings = [
     seller: "Aphi Mobile Deals",
     location: "Cape Town",
     type: "Product",
+    whatsapp: "27781288146",
   },
   {
     id: 2,
@@ -25,6 +26,7 @@ const featuredListings = [
     seller: "Nokwanda Hair Boutique",
     location: "Khayelitsha",
     type: "Product",
+    whatsapp: "27781288146",
   },
   {
     id: 3,
@@ -34,6 +36,7 @@ const featuredListings = [
     seller: "LashbyLelo",
     location: "Bellville",
     type: "Service",
+    whatsapp: "27781288146",
   },
   {
     id: 4,
@@ -43,6 +46,7 @@ const featuredListings = [
     seller: "Clawed by Zee",
     location: "Maitland",
     type: "Service",
+    whatsapp: "27781288146",
   },
   {
     id: 5,
@@ -52,6 +56,7 @@ const featuredListings = [
     seller: "Cape iPhone Plug",
     location: "Cape Town",
     type: "Product",
+    whatsapp: "27781288146",
   },
   {
     id: 6,
@@ -61,6 +66,7 @@ const featuredListings = [
     seller: "The Wig Suite",
     location: "Parow",
     type: "Service",
+    whatsapp: "27781288146",
   },
 ];
 
@@ -96,7 +102,13 @@ function CategoryCard({ icon, name }) {
   );
 }
 
-function ListingCard({ emoji, title, price, seller, location, type }) {
+function openWhatsApp(item) {
+  const message = `Hi ${item.seller}, I'm interested in ${item.title} listed on Glow & Gadgets for ${item.price}. Is it still available?`;
+  const url = `https://wa.me/${item.whatsapp}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+}
+
+function ListingCard({ item }) {
   return (
     <div
       style={{
@@ -116,7 +128,7 @@ function ListingCard({ emoji, title, price, seller, location, type }) {
           marginBottom: "12px",
         }}
       >
-        <div style={{ fontSize: "34px" }}>{emoji}</div>
+        <div style={{ fontSize: "34px" }}>{item.emoji}</div>
         <span
           style={{
             fontSize: "12px",
@@ -127,17 +139,17 @@ function ListingCard({ emoji, title, price, seller, location, type }) {
             color: "#d4d4d4",
           }}
         >
-          {type}
+          {item.type}
         </span>
       </div>
 
-      <h3 style={{ margin: "0 0 10px 0", fontSize: "20px" }}>{title}</h3>
+      <h3 style={{ margin: "0 0 10px 0", fontSize: "20px" }}>{item.title}</h3>
 
       <p style={{ margin: "0 0 6px 0", color: "#cfcfcf", fontSize: "14px" }}>
-        Seller: {seller}
+        Seller: {item.seller}
       </p>
       <p style={{ margin: "0 0 14px 0", color: "#a3a3a3", fontSize: "14px" }}>
-        Location: {location}
+        Location: {item.location}
       </p>
 
       <div
@@ -150,12 +162,13 @@ function ListingCard({ emoji, title, price, seller, location, type }) {
       >
         <div>
           <div style={{ color: "#facc15", fontWeight: "bold", fontSize: "20px" }}>
-            {price}
+            {item.price}
           </div>
         </div>
         <button
+          onClick={() => openWhatsApp(item)}
           style={{
-            background: "#ef4444",
+            background: "#25D366",
             color: "white",
             border: "none",
             padding: "10px 16px",
@@ -164,7 +177,7 @@ function ListingCard({ emoji, title, price, seller, location, type }) {
             fontWeight: "bold",
           }}
         >
-          Order Now
+          WhatsApp Order
         </button>
       </div>
     </div>
@@ -434,7 +447,7 @@ export default function App() {
             <div>
               <h2 style={{ fontSize: "32px", margin: "0 0 10px 0" }}>Featured listings</h2>
               <p style={{ color: "#b3b3b3", margin: 0 }}>
-                A better marketplace experience for customers and sellers.
+                Tap WhatsApp order to contact the seller directly.
               </p>
             </div>
 
@@ -461,7 +474,7 @@ export default function App() {
             }}
           >
             {featuredListings.map((item) => (
-              <ListingCard key={item.id} {...item} />
+              <ListingCard key={item.id} item={item} />
             ))}
           </div>
         </div>
@@ -479,7 +492,7 @@ export default function App() {
         >
           <TrustItem
             title="For customers"
-            text="Find local sellers faster, compare options in one place, and shop from a platform that feels more trustworthy than random DMs."
+            text="Find local sellers faster, compare options in one place, and message the seller directly on WhatsApp."
           />
           <TrustItem
             title="For sellers"
@@ -522,18 +535,9 @@ export default function App() {
                 marginTop: "18px",
               }}
             >
-              <input
-                placeholder="Business name"
-                style={inputStyle}
-              />
-              <input
-                placeholder="WhatsApp number"
-                style={inputStyle}
-              />
-              <input
-                placeholder="What do you sell?"
-                style={inputStyle}
-              />
+              <input placeholder="Business name" style={inputStyle} />
+              <input placeholder="WhatsApp number" style={inputStyle} />
+              <input placeholder="What do you sell?" style={inputStyle} />
               <button
                 style={{
                   background: "#facc15",
